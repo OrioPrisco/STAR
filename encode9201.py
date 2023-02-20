@@ -5,6 +5,16 @@ import binascii
 import struct
 import json
 import argparse
+import re
+
+hex_regex = r'0x([0-9A-Fa-f]*)'
+
+def	encode_hex_string(data):
+	hex_match = re.search(hex_regex, data)
+	assert hex_match, f"Not an hex string {data}"
+	num = f"{int(hex_match.group(1), 16):016x}".upper()
+	assert len(num) == 16, f"Number too big {data}"
+	return "00" + "000000" + num
 
 """
 takes a string without qutations marks
@@ -23,7 +33,10 @@ takes a float
 def	encode_num(data):
 	return "00" + "000000" + binascii.hexlify(struct.pack('d', float(data))).decode('utf-8').upper()
 
-def	encode_data(data):
+def	encode_data(data, **kwargs):
+	key = kwargs.pop("key", "")
+	if (isinstance(data,str) and "color" in key and re.search(hex_regex, data)):
+		return encode_hex_string(data)
 	if isinstance(data, str):
 		return encode_str(data)
 	if isinstance(data, float):
@@ -31,7 +44,7 @@ def	encode_data(data):
 	assert False, f"Cannot encode {type(data)} : {data}"
 
 def	encode_entry(key, value):
-	return encode_data(key) + encode_data(value)
+	return encode_data(key) + encode_data(value, key=key)
 
 def	output_all(entries):
 	length = f"{len(entries):06x}".upper()
