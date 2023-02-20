@@ -41,7 +41,7 @@ def	decode_entry(line, index):
 	index += chars
 	return (index - og_index, entry)
 
-def	print_9201(line):
+def	decode_9201(line):
 	assert line[0:4] == "9201", f"Unknown header : {line[index:index+4]}, can only decode 9201"
 	entries = {}
 	index = 4
@@ -55,9 +55,9 @@ def	print_9201(line):
 		chars,value =  decode_entry(line, index)
 		index += chars
 		entries[key] = value
-	print(json.dumps(entries, indent = 4))
 	print(f"decoded {index} characters, {len(line) - index} remaining", file=sys.stderr)
+	return entries
 
 if __name__ == "__main__":
 	line = input()
-	print_9201(line)
+	print(json.dumps(decode_9201(line), indent=4))
