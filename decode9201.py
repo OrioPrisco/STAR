@@ -1,12 +1,7 @@
 #!/bin/python3
 
-#https://stackoverflow.com/questions/5574702/how-do-i-print-to-stderr-in-python/14981125#14981125
-import sys
 import binascii
 import struct
-
-def eprint(*args, **kwargs):
-	print(*args, file=sys.stderr, **kwargs)
 
 """
 returns chars decoded
@@ -38,8 +33,7 @@ def	print_entry(line, index):
 	elif (entry_type == 1):
 		index += decode_str(line, index)
 	else:
-		eprint("Unknown entry format {line[index-2:index]}")
-		exit(1)
+		assert false, "Unknown entry format {line[index-2:index]}"
 	return (index - og_index)
 
 def	print_9201(line):
@@ -62,7 +56,5 @@ def	print_9201(line):
 
 if __name__ == "__main__":
 	line = input()
-	if (line[0:4] != "9201"):
-		eprint(f"Unknown header : {line[index:index+4]}, can only decode 9201")
-		exit(1)
+	assert line[0:4] == "9201", f"Unknown header : {line[index:index+4]}, can only decode 9201"
 	print_9201(line)
