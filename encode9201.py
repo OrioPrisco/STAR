@@ -26,7 +26,7 @@ takes a float
 00 + padding + binary representation of float
 """
 def	encode_num(data):
-	return "00" + "000000" + binascii.hexlify(struct.pack('d', float(data))).decode('utf-8')
+	return "00" + "000000" + binascii.hexlify(struct.pack('d', float(data))).decode('utf-8').upper()
 
 """
 takes an entry in the following format
