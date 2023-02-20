@@ -14,5 +14,5 @@ to encode execue `python3 encode.py` then paste a decoded file, the send EOF (CT
 alternatively you can redirect the sandard input and or output  
   
 ##Options
-`encode.py` : none  
-`decode.py` : `-d` to display additional information on stderr
+`encode.py` : `-i|--input input_file` read from `input_file` instead of stdin  
+`decode.py` : `-d|--debug` to display additional information on stderr
