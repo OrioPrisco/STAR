@@ -23,7 +23,7 @@ def entry_type01(line, index):
 
 """
 returns char decoded
-no idea what the data means yet
+these are doubles
 """
 def  entry_type00(line, index):
 	print(struct.unpack('d', binascii.unhexlify(line[index+6:index+22]))[0], end="")
