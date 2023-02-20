@@ -37,7 +37,7 @@ def	decode_entry(line, index):
 	elif (entry_type == 1):
 		chars,entry = decode_str(line, index)
 	else:
-		assert false, "Unknown entry format {line[index-2:index]}"
+		assert False, f"Unknown entry format {line[index-2:index]}"
 	index += chars
 	return (index - og_index, entry)
 
