@@ -3,6 +3,7 @@
 import binascii
 import struct
 import json
+import sys
 
 """
 returns (chars decoded, string)
@@ -43,11 +44,10 @@ def	decode_entry(line, index):
 def	print_9201(line):
 	index = 0
 	entries = {}
-	print(line[index:index+4])#header
 	index += 4
 	length = int(line[index:index+6], 16)
 	index += 6
-	print(f"{length} key value pairs")
+	print(f"{length} key value pairs", file=sys.stderr)
 	index += 6 #padding
 	for i in range(length):
 		chars,key = decode_entry(line, index)
@@ -56,7 +56,7 @@ def	print_9201(line):
 		index += chars
 		entries[key] = value
 	print(json.dumps(entries, indent = 4))
-	print(f"decoded {index} characters, {len(line) - index} remaining")
+	print(f"decoded {index} characters, {len(line) - index} remaining", file=sys.stderr)
 
 if __name__ == "__main__":
 	line = input()
