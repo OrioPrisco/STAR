@@ -5,10 +5,15 @@ import sys
 import binascii
 import struct
 
+"""
+regexes annoted with a (1) are not super robust and could fail parsing
+very unusual but valid data
+Most likely this won't actually be an isue, but who knows
+"""
 number_regex = r'\s*([0-9]*\.[0-9]*)\s*'
-string_regex = r'\s*"([^"]*)"\s*'
-entire_regex = r'\{(.*)\}' #brackets in the data might mess this ?
-entry_regex  = r'([^},]*),?' #% (string_regex, string_regex, number_regex)
+string_regex = r'\s*"([^"]*)"\s*' #(1)
+entire_regex = r'\{(.*)\}'        #(1)
+entry_regex  = r'([^},]*),?'      #(1)
 ending_regex = r'^\s*}'
 
 """
