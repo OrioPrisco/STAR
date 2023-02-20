@@ -42,9 +42,9 @@ def	decode_entry(line, index):
 	return (index - og_index, entry)
 
 def	print_9201(line):
-	index = 0
+	assert line[0:4] == "9201", f"Unknown header : {line[index:index+4]}, can only decode 9201"
 	entries = {}
-	index += 4
+	index = 4
 	length = int(line[index:index+6], 16)
 	index += 6
 	print(f"{length} key value pairs", file=sys.stderr)
@@ -60,5 +60,4 @@ def	print_9201(line):
 
 if __name__ == "__main__":
 	line = input()
-	assert line[0:4] == "9201", f"Unknown header : {line[index:index+4]}, can only decode 9201"
 	print_9201(line)
