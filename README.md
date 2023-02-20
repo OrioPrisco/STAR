@@ -1,5 +1,7 @@
 # monolith-savefile
 
+Python scripts to decode and reencode `9201` entries from monolith save files
+
 ## requirements
 - python3
 
