@@ -4,6 +4,7 @@ import sys
 import binascii
 import struct
 import json
+import argparse
 
 """
 takes a string without qutations marks
@@ -45,5 +46,7 @@ def	encode_all(data):
 	output_all(encoded_dict)
 
 if __name__ == "__main__":
-	to_encode = sys.stdin.read()
-	encode_all(to_encode)
+	parser = argparse.ArgumentParser()
+	parser.add_argument("-i", "--input", required=False, type=argparse.FileType('r'), default=sys.stdin)
+	args = parser.parse_args()
+	encode_all(args.input.read())
