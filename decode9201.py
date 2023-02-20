@@ -41,13 +41,15 @@ def	decode_entry(line, index):
 	index += chars
 	return (index - og_index, entry)
 
-def	decode_9201(line):
+def	decode_9201(line, *args, **kwargs):
 	assert line[0:4] == "9201", f"Unknown header : {line[index:index+4]}, can only decode 9201"
+	debug = kwargs.pop("debug", 0)
 	entries = {}
 	index = 4
 	length = int(line[index:index+6], 16)
 	index += 6
-	print(f"{length} key value pairs", file=sys.stderr)
+	if debug:
+		print(f"{length} key value pairs", file=sys.stderr)
 	index += 6 #padding
 	for i in range(length):
 		chars,key = decode_entry(line, index)
@@ -55,9 +57,11 @@ def	decode_9201(line):
 		chars,value =  decode_entry(line, index)
 		index += chars
 		entries[key] = value
-	print(f"decoded {index} characters, {len(line) - index} remaining", file=sys.stderr)
+	if debug:
+		print(f"decoded {index} characters, {len(line) - index} remaining", file=sys.stderr)
 	return entries
 
 if __name__ == "__main__":
 	line = input()
-	print(json.dumps(decode_9201(line), indent=4))
+	debug = ("-d" in sys.argv)
+	print(json.dumps(decode_9201(line, debug=debug), indent=4))
