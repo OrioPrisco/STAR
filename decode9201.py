@@ -6,6 +6,8 @@ import json
 import sys
 import argparse
 
+valid_headers = ["9201", "2E01"]
+
 """
 returns (chars decoded, string)
 """
@@ -61,7 +63,7 @@ def	decode_entry(line, index):
 		return (index - og_index, key, value)
 
 def	decode_9201(line, *args, **kwargs):
-	assert line[0:4] == "9201", f"Unknown header : {line[index:index+4]}, expected 9201"
+	assert line[0:4] == "9201", f"Incorrect header : {line[index:index+4]}, expected 9201"
 	debug = kwargs.pop("debug", 0)
 	entries = {}
 	index = 4
@@ -79,7 +81,7 @@ def	decode_9201(line, *args, **kwargs):
 	return entries
 
 def	decode_2E01(line, *args, **kwargs):
-	assert line[0:4] == "2E01", f"Unknown header : {line[index:index+4]}, expected 2E01"
+	assert line[0:4] == "2E01", f"Incorrect header : {line[index:index+4]}, expected 2E01"
 	debug = kwargs.pop("debug", 0)
 	entries = []
 	index = 4
@@ -96,16 +98,20 @@ def	decode_2E01(line, *args, **kwargs):
 		print(f"decoded {index} characters, {len(line) - index} remaining", file=sys.stderr)
 	return entries
 
+header_decoders = {
+	"9201" : decode_9201,
+	"2E01" : decode_2E01,
+}
 
+def	decode_header(line, header, *args, **kwargs):
+	assert header in valid_headers, f"Unknown header {header}, expected one of {valid_headers}"
+	return header_decoders[header](line, args, kwargs)
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-d", "--debug", required=False, action='store_true', default=False)
-	parser.add_argument("-t", "--type", required=False, action='store', choices=["9201", "2E01"], default="9201")
+	parser.add_argument("-t", "--type", required=False, action='store', choices=valid_headers, default="9201")
 	args = parser.parse_args()
 	line = input()
-	if args.type == "9201":
-		output = decode_9201(line, debug=args.debug)
-	elif args.type == "2E01":
-		output = decode_2E01(line, debug=args.debug)
+	output = decode_header(line, args.type, debug=args.debug)
 	print(json.dumps(output, indent=4))
