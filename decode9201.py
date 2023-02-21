@@ -79,8 +79,8 @@ def	decode_9201(line, *args, **kwargs):
 	return entries
 
 if __name__ == "__main__":
-	line = input()
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-d", "--debug", required=False, action='store_true', default=False)
 	args = parser.parse_args()
+	line = input()
 	print(json.dumps(decode_9201(line, debug=args.debug), indent=4))
