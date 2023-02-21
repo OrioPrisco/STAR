@@ -61,7 +61,7 @@ def	decode_entry(line, index):
 		return (index - og_index, key, value)
 
 def	decode_9201(line, *args, **kwargs):
-	assert line[0:4] == "9201", f"Unknown header : {line[index:index+4]}, can only decode 9201"
+	assert line[0:4] == "9201", f"Unknown header : {line[index:index+4]}, expected 9201"
 	debug = kwargs.pop("debug", 0)
 	entries = {}
 	index = 4
@@ -78,9 +78,34 @@ def	decode_9201(line, *args, **kwargs):
 		print(f"decoded {index} characters, {len(line) - index} remaining", file=sys.stderr)
 	return entries
 
+def	decode_2E01(line, *args, **kwargs):
+	assert line[0:4] == "2E01", f"Unknown header : {line[index:index+4]}, expected 2E01"
+	debug = kwargs.pop("debug", 0)
+	entries = []
+	index = 4
+	length = int(line[index:index+6], 16)
+	index += 6
+	if debug:
+		print(f"{length} values", file=sys.stderr)
+	index+=6 # padding
+	for i in range(length):
+		chars,value = decode_data(line, index)
+		entries.append(value)
+		index+= chars
+	if debug:
+		print(f"decoded {index} characters, {len(line) - index} remaining", file=sys.stderr)
+	return entries
+
+
+
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-d", "--debug", required=False, action='store_true', default=False)
+	parser.add_argument("-t", "--type", required=False, action='store', choices=["9201", "2E01"], default="9201")
 	args = parser.parse_args()
 	line = input()
-	print(json.dumps(decode_9201(line, debug=args.debug), indent=4))
+	if args.type == "9201":
+		output = decode_9201(line, debug=args.debug)
+	elif args.type == "2E01":
+		output = decode_2E01(line, debug=args.debug)
+	print(json.dumps(output, indent=4))
