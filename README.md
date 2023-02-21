@@ -19,3 +19,4 @@ alternatively you can redirect the sandard input and or output
 `encode.py`	: `-i|--input input_file` read from `input_file` instead of stdin  
 `decode.py`	: `-d|--debug` to display additional information on stderr  
 both	: `-t|--type` to select the type of entries either `9201` or `2E01`
+	`-h|--help` displays an help message
