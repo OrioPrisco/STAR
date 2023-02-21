@@ -8,6 +8,7 @@ import argparse
 import re
 
 hex_regex = r'0x([0-9A-Fa-f]*)'
+valid_headers = ["9201", "2E01"]
 
 def	encode_hex_string(data):
 	hex_match = re.search(hex_regex, data)
@@ -46,20 +47,37 @@ def	encode_data(data, **kwargs):
 def	encode_entry(key, value):
 	return encode_data(key) + encode_data(value, key=key)
 
-def	output_all(entries):
+def	output_all(entries, header):
 	length = f"{len(entries):06x}".upper()
 	assert len(length) == 6, f"Error while encoding {data}, length too big"
-	print(f"9201{length}000000{''.join(entries)}")
+	print(f"{header}{length}000000{''.join(entries)}")
 
-def	encode_all(data):
+def	encode_9201(data):
 	json_dict = json.loads(data)
 	encoded_dict = []
 	for key in json_dict:
 		encoded_dict.append(encode_entry(key, json_dict[key]))
-	output_all(encoded_dict)
+	output_all(encoded_dict, "9201")
+
+def	encode_2E01(data):
+	json_array = json.loads(data)
+	encoded_array = []
+	for item in json_array:
+		encoded_array.append(encode_data(item))
+	output_all(encoded_array, "2E01")
+
+header_encoders = {
+	"9201" : encode_9201,
+	"2E01" : encode_2E01,
+}
+
+def encode_header(data, header):
+	assert header in valid_headers, f"Unknown header {header}, expected one of {valid_headers}"
+	return header_encoders[header](data)
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-i", "--input", required=False, type=argparse.FileType('r'), default=sys.stdin)
+	parser.add_argument("-t", "--type", required=False, action='store', choices=valid_headers, default="9201")
 	args = parser.parse_args()
-	encode_all(args.input.read())
+	encode_header(args.input.read(), args.type)
