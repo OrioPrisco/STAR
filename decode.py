@@ -63,6 +63,7 @@ def	decode_entry(line, index):
 		return (index - og_index, key, value)
 
 def	decode_9201(line, *args, **kwargs):
+	index = 0
 	assert line[0:4] == "9201", f"Incorrect header : {line[index:index+4]}, expected 9201"
 	debug = kwargs.pop("debug", 0)
 	entries = {}
@@ -81,6 +82,7 @@ def	decode_9201(line, *args, **kwargs):
 	return entries
 
 def	decode_2E01(line, *args, **kwargs):
+	index = 0
 	assert line[0:4] == "2E01", f"Incorrect header : {line[index:index+4]}, expected 2E01"
 	debug = kwargs.pop("debug", 0)
 	entries = []
