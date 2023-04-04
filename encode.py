@@ -8,7 +8,6 @@ import argparse
 import re
 
 hex_regex = r'0x([0-9A-Fa-f]*)'
-valid_headers = ["9201", "2E01"]
 
 def	encode_hex_string(data):
 	hex_match = re.search(hex_regex, data)
@@ -70,6 +69,8 @@ header_encoders = {
 	"9201" : encode_9201,
 	"2E01" : encode_2E01,
 }
+
+valid_headers = header_encoders.keys()
 
 def encode_header(data, header):
 	assert header in valid_headers, f"Unknown header {header}, expected one of {valid_headers}"

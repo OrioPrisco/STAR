@@ -6,8 +6,6 @@ import json
 import sys
 import argparse
 
-valid_headers = ["9201", "2E01"]
-
 """
 returns (chars decoded, string)
 """
@@ -104,6 +102,8 @@ header_decoders = {
 	"9201" : decode_9201,
 	"2E01" : decode_2E01,
 }
+
+valid_headers = header_decoders.keys()
 
 def	decode_header(line, header, *args, **kwargs):
 	assert header in valid_headers, f"Unknown header {header}, expected one of {valid_headers}"
