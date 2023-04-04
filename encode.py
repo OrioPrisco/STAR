@@ -33,8 +33,7 @@ takes a float
 def	encode_num(data):
 	return "00" + "000000" + binascii.hexlify(struct.pack('d', float(data))).decode('utf-8').upper()
 
-def	encode_data(data, **kwargs):
-	key = kwargs.pop("key", "")
+def	encode_data(data, key = ""):
 	if (isinstance(data,str) and "color" in key and re.search(hex_regex, data)):
 		return encode_hex_string(data)
 	if isinstance(data, str):
@@ -44,7 +43,7 @@ def	encode_data(data, **kwargs):
 	assert False, f"Cannot encode {type(data)} : {data}"
 
 def	encode_entry(key, value):
-	return encode_data(key) + encode_data(value, key=key)
+	return encode_data(key) + encode_data(value, key)
 
 def	output_all(entries, header):
 	length = f"{len(entries):06x}".upper()

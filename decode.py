@@ -32,9 +32,8 @@ def decode_hex_str(line, index):
 """
 returns (chars decoded, data)
 """
-def	decode_data(line, index, **kwargs):
+def	decode_data(line, index, key = ""):
 	og_index = index
-	key = kwargs.pop("key", "")
 	entry_type = int(line[index:index+2])
 	index += 2
 	if (entry_type == 0):
@@ -56,14 +55,13 @@ def	decode_entry(line, index):
 		og_index = index
 		chars,key = decode_data(line, index)
 		index += chars
-		chars,value =  decode_data(line, index, key=key)
+		chars,value =  decode_data(line, index, key)
 		index += chars
 		return (index - og_index, key, value)
 
-def	decode_9201(line, *args, **kwargs):
+def	decode_9201(line, debug = False):
 	index = 0
 	assert line[0:4] == "9201", f"Incorrect header : {line[index:index+4]}, expected 9201"
-	debug = kwargs.pop("debug", 0)
 	entries = {}
 	index = 4
 	length = int(line[index:index+6], 16)
@@ -79,10 +77,9 @@ def	decode_9201(line, *args, **kwargs):
 		print(f"decoded {index} characters, {len(line) - index} remaining", file=sys.stderr)
 	return entries
 
-def	decode_2E01(line, *args, **kwargs):
+def	decode_2E01(line, debug = False):
 	index = 0
 	assert line[0:4] == "2E01", f"Incorrect header : {line[index:index+4]}, expected 2E01"
-	debug = kwargs.pop("debug", 0)
 	entries = []
 	index = 4
 	length = int(line[index:index+6], 16)
@@ -105,9 +102,9 @@ header_decoders = {
 
 valid_headers = header_decoders.keys()
 
-def	decode_header(line, header, *args, **kwargs):
+def	decode_header(line, header, debug = False):
 	assert header in valid_headers, f"Unknown header {header}, expected one of {valid_headers}"
-	return header_decoders[header](line, args, kwargs)
+	return header_decoders[header](line, debug)
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
@@ -115,5 +112,5 @@ if __name__ == "__main__":
 	parser.add_argument("-t", "--type", required=False, action='store', choices=valid_headers, default="9201")
 	args = parser.parse_args()
 	line = input()
-	output = decode_header(line, args.type, debug=args.debug)
+	output = decode_header(line, args.type, args.debug)
 	print(json.dumps(output, indent=4))
