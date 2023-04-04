@@ -7,10 +7,10 @@ import json
 import argparse
 import re
 
-hex_regex = r'0x([0-9A-Fa-f]*)'
+hex_regex = re.compile(r'0x([0-9A-Fa-f]*)')
 
 def	encode_hex_string(data):
-	hex_match = re.search(hex_regex, data)
+	hex_match = hex_regex.search(data)
 	assert hex_match, f"Not an hex string {data}"
 	num = f"{int(hex_match.group(1), 16):016x}".upper()
 	assert len(num) == 16, f"Number too big {data}"
@@ -34,7 +34,7 @@ def	encode_num(data):
 	return "00" + "000000" + binascii.hexlify(struct.pack('d', float(data))).decode('utf-8').upper()
 
 def	encode_data(data, key = ""):
-	if (isinstance(data,str) and "color" in key and re.search(hex_regex, data)):
+	if (isinstance(data,str) and "color" in key and hex_regex.search(data)):
 		return encode_hex_string(data)
 	if isinstance(data, str):
 		return encode_str(data)
