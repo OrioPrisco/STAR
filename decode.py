@@ -103,6 +103,8 @@ header_decoders = {
 valid_headers = header_decoders.keys()
 
 def	decode_header(line, header, debug = False):
+	if header == None:
+		header = line[0:4]
 	assert header in valid_headers, f"Unknown header {header}, expected one of {valid_headers}"
 	return header_decoders[header](line, debug)
 
