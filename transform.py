@@ -1,0 +1,23 @@
+#!/bin/python3
+
+import encode as en
+import decode as dc
+import argparse
+import json
+import sys
+
+valid_headers = {"9201", "2E01"}
+
+if __name__ == "__main__":
+	parser = argparse.ArgumentParser()
+	parser.add_argument("-i", "--input", required=False, type=argparse.FileType('r'), default=sys.stdin)
+	parser.add_argument("-v", "--verbose", required=False, action='store_true', default=False)
+	parser.add_argument("-d", "--decode", required=False, action='store_true', default=False)
+	parser.add_argument("-t", "--type", required=False, action='store', choices=valid_headers, default="9201")
+	args = parser.parse_args()
+	if args.decode:
+		line = args.input.read()
+		output = dc.decode_header(line, args.type, args.verbose)
+		print(json.dumps(output, indent=4))
+	else:
+		en.encode_header(args.input.read(), args.type)
