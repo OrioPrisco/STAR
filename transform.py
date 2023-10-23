@@ -16,8 +16,7 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser(parents=[deciding_args_parser])
 	parser.add_argument("-i", "--input", required=False, type=argparse.FileType('r'), default=sys.stdin)
 	parser.add_argument("-v", "--verbose", required=False, action='store_true', default=False)
-	#parser.add_argument("-d", "--decode", required=False, action='store_true', default=False)
-	parser.add_argument("-t", "--type", required=not deciding_args.decode, action='store', choices=valid_headers, default="9201")
+	parser.add_argument("-t", "--type", required=not deciding_args.decode, action='store', choices=valid_headers)
 	args = parser.parse_args()
 	if args.decode:
 		line = args.input.read()
