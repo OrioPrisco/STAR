@@ -74,10 +74,3 @@ valid_headers = header_encoders.keys()
 def encode_header(data, header):
 	assert header in valid_headers, f"Unknown header {header}, expected one of {valid_headers}"
 	return header_encoders[header](data)
-
-if __name__ == "__main__":
-	parser = argparse.ArgumentParser()
-	parser.add_argument("-i", "--input", required=False, type=argparse.FileType('r'), default=sys.stdin)
-	parser.add_argument("-t", "--type", required=False, action='store', choices=valid_headers, default="9201")
-	args = parser.parse_args()
-	encode_header(args.input.read(), args.type)

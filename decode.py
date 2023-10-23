@@ -107,12 +107,3 @@ def	decode_header(line, header, debug = False):
 		header = line[0:4]
 	assert header in valid_headers, f"Unknown header {header}, expected one of {valid_headers}"
 	return header_decoders[header](line, debug)
-
-if __name__ == "__main__":
-	parser = argparse.ArgumentParser()
-	parser.add_argument("-d", "--debug", required=False, action='store_true', default=False)
-	parser.add_argument("-t", "--type", required=False, action='store', choices=valid_headers, default="9201")
-	args = parser.parse_args()
-	line = input()
-	output = decode_header(line, args.type, args.debug)
-	print(json.dumps(output, indent=4))
