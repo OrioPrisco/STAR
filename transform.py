@@ -19,8 +19,8 @@ if __name__ == "__main__":
 	parser.add_argument("-t", "--type", required=not deciding_args.decode, action='store', choices=valid_headers)
 	args = parser.parse_args()
 	if args.decode:
-		line = args.input.read()
-		output = dc.decode_header(line, args.type, args.verbose)
-		print(json.dumps(output, indent=4))
+		for line in args.input.readlines():
+			output = dc.decode_header(line, args.type, args.verbose)
+			print(json.dumps(output, indent=4))
 	else:
 		print(en.encode_header(args.input.read(), args.type))
