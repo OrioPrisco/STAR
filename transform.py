@@ -9,14 +9,11 @@ import sys
 valid_headers = {"9201", "2E01"}
 
 if __name__ == "__main__":
-	deciding_args_parser = argparse.ArgumentParser(add_help=False)
-	deciding_args_parser.add_argument("-d", "--decode", required=False, action='store_true', default=False)
-	deciding_args, _ = deciding_args_parser.parse_known_args()
-
-	parser = argparse.ArgumentParser(parents=[deciding_args_parser])
+	parser = argparse.ArgumentParser()
 	parser.add_argument("-i", "--input", required=False, type=argparse.FileType('r'), default=sys.stdin)
+	parser.add_argument("-d", "--decode", required=False, action='store_true', default=False)
 	parser.add_argument("-v", "--verbose", required=False, action='store_true', default=False)
-	parser.add_argument("-t", "--type", required=not deciding_args.decode, action='store', choices=valid_headers)
+	parser.add_argument("-t", "--type", required=False, action='store', choices=valid_headers)
 	args = parser.parse_args()
 	if args.decode:
 		for line in args.input.readlines():
