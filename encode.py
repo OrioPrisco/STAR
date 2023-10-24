@@ -50,15 +50,13 @@ def	output_all(entries, header):
 	assert len(length) == 6, f"Error while encoding {data}, length too big"
 	return f"{header}{length}000000{''.join(entries)}"
 
-def	encode_9201(data):
-	json_dict = json.loads(data)
+def	encode_9201(json_dict):
 	encoded_dict = []
 	for key in json_dict:
 		encoded_dict.append(encode_entry(key, json_dict[key]))
 	return output_all(encoded_dict, "9201")
 
-def	encode_2E01(data):
-	json_array = json.loads(data)
+def	encode_2E01(json_array):
 	encoded_array = []
 	for item in json_array:
 		encoded_array.append(encode_data(item))

@@ -23,4 +23,5 @@ if __name__ == "__main__":
 			output = dc.decode_header(line, args.type, args.verbose)
 			print(json.dumps(output, indent=4))
 	else:
-		print(en.encode_header(args.input.read(), args.type))
+		json_obj = json.loads(args.input.read())
+		print(en.encode_header(json_obj, args.type))
