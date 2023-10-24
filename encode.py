@@ -40,6 +40,8 @@ def	encode_data(data, key = ""):
 		return encode_str(data)
 	if isinstance(data, float):
 		return encode_num(data)
+	if isinstance(data, int):
+		return encode_num(data)
 	assert False, f"Cannot encode {type(data)} : {data}"
 
 def	encode_entry(key, value):
