@@ -51,14 +51,14 @@ def	output_all(entries, header):
 	return f"{header}{length}000000{''.join(entries)}"
 
 def	encode_9201(json_dict):
-	assert type(json_dict) == type({}), f"9201 encoder can only encode dicts, not {type(json_dict).__name__}"
+	assert isinstance(json_dict, dict), f"9201 encoder can only encode dicts, not {type(json_dict).__name__}"
 	encoded_dict = []
 	for key in json_dict:
 		encoded_dict.append(encode_entry(key, json_dict[key]))
 	return output_all(encoded_dict, "9201")
 
 def	encode_2E01(json_array):
-	assert type(json_array) == type([]), f"2E01 encoder can only encode arrays, not {type(json_array).__name__}"
+	assert isinstance(json_array, list), f"2E01 encoder can only encode arrays, not {type(json_array).__name__}"
 	encoded_array = []
 	for item in json_array:
 		encoded_array.append(encode_data(item))
