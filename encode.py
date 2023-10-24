@@ -48,21 +48,21 @@ def	encode_entry(key, value):
 def	output_all(entries, header):
 	length = f"{len(entries):06x}".upper()
 	assert len(length) == 6, f"Error while encoding {data}, length too big"
-	print(f"{header}{length}000000{''.join(entries)}")
+	return f"{header}{length}000000{''.join(entries)}"
 
 def	encode_9201(data):
 	json_dict = json.loads(data)
 	encoded_dict = []
 	for key in json_dict:
 		encoded_dict.append(encode_entry(key, json_dict[key]))
-	output_all(encoded_dict, "9201")
+	return output_all(encoded_dict, "9201")
 
 def	encode_2E01(data):
 	json_array = json.loads(data)
 	encoded_array = []
 	for item in json_array:
 		encoded_array.append(encode_data(item))
-	output_all(encoded_array, "2E01")
+	return output_all(encoded_array, "2E01")
 
 header_encoders = {
 	"9201" : encode_9201,
