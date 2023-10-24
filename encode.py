@@ -74,5 +74,10 @@ header_encoders = {
 valid_headers = header_encoders.keys()
 
 def encode_header(data, header):
+	if header == None:
+		if isinstance(data, dict):
+			header="9201"
+		elif isinstance(data, list):
+			header="2E01"
 	assert header in valid_headers, f"Unknown header {header}, expected one of {valid_headers}"
 	return header_encoders[header](data)
