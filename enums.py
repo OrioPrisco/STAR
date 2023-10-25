@@ -13,6 +13,7 @@ class Upgrade(Enum):
 	plating = 7
 	artifact = 8
 	blink = 9
+	second_wind = 10
 	extra_pow = 11
 	fortune = 12
 	reserves = 13
@@ -44,36 +45,58 @@ class Keyword (Enum):
 	bursts = 20
 	quick = 21
 	gatling = 22
+	ringshot = 23
+	instant_recall = 24
+	shielded = 25
+	lance = 26
+	chariot = 27
+	heavy = 28
+	bloodlust = 29
+	freeze = 30
+	continuous = 31
+	align = 32
+	consecrated = 33
+	antimagic = 34
+	akashic = 35
+	disrupting = 36
 	backblast = 37
-	high = 43
+	infested = 38
+	swarming = 39
+	drag = 40
+	instant_hit = 41
+	overcharge = 42
+	high_caliber = 43
+	hit_streak = 44
 	backshot = 45
-
-"""
-missing :
-freeze
-akashic
-antimagic
-consecrated
-disrupting
-infested
-align
-swarming
-instant hit
-overcharge
-drag
-continuous
-bloodlust
-heavy
-lunge
-chariot
-instant recall
-lance
-shieldfield
-ringshor
-auto hammer
-
-all unique keywords and curses
-"""
+	wall_breaker = 46
+	all_pierce = 47
+	holy = 48
+	hunter = 49
+	ammo_leak = 50
+	ammo_steal = 51
+	super_galactic = 52
+	heaven_piercing = 53
+	all_blast = 54
+	echo = 55
+	unstable = 56
+	sticky_bombs = 57
+	remote_trigger = 58
+	lunge = 59
+	pin = 60
+	enigmatic = 61 # overrides other keywords
+	excavate = 62
+	auto_hammer = 63
+	curse_of_pain = 64
+	curse_of_numbness = 65
+	curse_of_fatigue = 66
+	curse_of_stiffness = 67
+	curse_of_haphephobia = 68
+	curse_of_paranoia = 69
+	curse_of_chaos = 70
+	sharpshooter = 71
+	impale = 72
+	sacred = 73
+	entropic = 74
 
 class Floor(Enum):
 	#(excavation) = 0 ??
@@ -85,7 +108,7 @@ class Floor(Enum):
 	maintenance_system = 6
 	bellows = 7
 	sanctum = 8
-	#??? = 9
+	unknown = 9
 	the_conduit = 10
 	temple = 11
 	nowhere = 12
@@ -100,5 +123,56 @@ class Weapon(Enum):
 	charge = 5
 	revolver = 6
 	razor = 7
+	pulsar = 8
+	thunderhead = 9
+	railgun = 10
+	drill = 11
+	spear = 12
+	runic = 13
+	bow = 14 # SCRAPPED
+	grenade = 15 # SCRAPPED
 	skully = 100
-	#missing a few
+
+class Cartridge:
+	magnifying_glass = 0
+	firecracker = 1
+	victory_sign = 2
+	golden_star = 3
+	cool_sunglasses = 4
+	spyglass = 5
+	hat = 6
+	plate = 7
+	_13_leaf_clover = 8
+	mining_hat = 9
+	rocket = 10
+	cloak = 11
+	dagger = 15
+	member_card = 16
+	pickaxe = 17
+	hammer = 18
+	glowing_run = 19
+	treasure_chest = 20
+	err_integer_overflow = 21
+	battery = 22
+	broken_mirror = 23
+	crowbar = 24
+	gun = 25
+	calculator = 26
+	bulwark = 27
+	plug = 28
+	braveheart = 29
+	scope = 30
+	crackshot = 31
+	reflector = 32
+	garbage_data = 33
+	magic_sword = 34
+	magic_shield = 35
+	magic_rod = 36
+	magic_pack = 37
+	temple_game = 38
+	power_core = 39
+	iron_heart = 40
+	transfusion = 41
+	credit_card = 42
+	bandage = 43
+	contract = 44
