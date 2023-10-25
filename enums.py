@@ -2,15 +2,6 @@
 
 from enum import Enum
 
-def getFromEnum(enum, value):
-	try:
-		if isinstance(value, int):
-			return enum(value)
-		if isinstance(value, str):
-			return enum[value]
-	except KeyError:
-		return None
-
 class Upgrade(Enum):
 	salvage = 0
 	weatherproof = 1
