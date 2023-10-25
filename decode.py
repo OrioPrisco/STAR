@@ -59,7 +59,7 @@ def	decode_entry(line, index):
 		index += chars
 		return (index - og_index, key, value)
 
-def	decode_9201(line, debug = False):
+def	decode_9201(line, debug = False, _ = None):
 	index = 0
 	assert line[0:4] == "9201", f"Incorrect header : {line[index:index+4]}, expected 9201"
 	entries = {}
@@ -77,7 +77,17 @@ def	decode_9201(line, debug = False):
 		print(f"decoded {index} characters, {len(line) - index} remaining", file=sys.stderr)
 	return entries
 
-def	decode_2E01(line, debug = False):
+def	try_str_from_enum(value, kind=None):
+	if (isinstance(value, str)):
+		return value
+	if kind == None:
+		return None
+	try:
+		return kind(value).name
+	except ValueError:
+		return None
+
+def	decode_2E01(line, debug = False, kind = None):
 	index = 0
 	assert line[0:4] == "2E01", f"Incorrect header : {line[index:index+4]}, expected 2E01"
 	entries = []
@@ -89,6 +99,12 @@ def	decode_2E01(line, debug = False):
 	index+=6 # padding
 	for i in range(length):
 		chars,value = decode_data(line, index)
+		value_as_str = try_str_from_enum(value, kind)
+		if value_as_str == None:
+			if debug:
+				print(f"Warning, couldn't convert {value} to a string", file=sys.stderr)
+		else:
+			value = value_as_str
 		entries.append(value)
 		index+= chars
 	if debug:
@@ -102,8 +118,8 @@ header_decoders = {
 
 valid_headers = header_decoders.keys()
 
-def	decode_header(line, header, debug = False):
+def	decode_header(line, header, debug = False, kind = None):
 	if header == None:
 		header = line[0:4]
 	assert header in valid_headers, f"Unknown header {header}, expected one of {valid_headers}"
-	return header_decoders[header](line, debug)
+	return header_decoders[header](line, debug, kind)

@@ -9,6 +9,7 @@ import re
 
 hex_regex = re.compile(r'0x([0-9A-Fa-f]*)')
 
+
 def	encode_hex_string(data):
 	hex_match = hex_regex.search(data)
 	assert hex_match, f"Not an hex string {data}"
@@ -52,17 +53,33 @@ def	output_all(entries, header):
 	assert len(length) == 6, f"Error while encoding {data}, length too big"
 	return f"{header}{length}000000{''.join(entries)}"
 
-def	encode_9201(json_dict, debug = False):
+def	encode_9201(json_dict, debug = False, _ = None):
 	assert isinstance(json_dict, dict), f"9201 encoder can only encode dicts, not {type(json_dict).__name__}"
 	encoded_dict = []
 	for key in json_dict:
 		encoded_dict.append(encode_entry(key, json_dict[key]))
 	return output_all(encoded_dict, "9201")
 
-def	encode_2E01(json_array, debug = False):
+def	try_int_from_enum(value, kind=None):
+	if (isinstance(value, int)) or isinstance(value, float):
+		return value
+	if kind == None:
+		return None
+	try:
+		return kind[value.lower()].value
+	except KeyError:
+		return None
+
+def	encode_2E01(json_array, debug = False, kind = None):
 	assert isinstance(json_array, list), f"2E01 encoder can only encode arrays, not {type(json_array).__name__}"
 	encoded_array = []
 	for item in json_array:
+		item_as_int = try_int_from_enum(item, kind)
+		if item_as_int == None:
+			if debug:
+				print(f"Warning, couldn't convert {item} to an integer value", file=sys.stderr)
+		else:
+			item = item_as_int
 		encoded_array.append(encode_data(item))
 	return output_all(encoded_array, "2E01")
 
@@ -73,11 +90,11 @@ header_encoders = {
 
 valid_headers = header_encoders.keys()
 
-def encode_header(data, header, debug = False):
+def encode_header(data, header, debug = False, kind = None):
 	if header == None:
 		if isinstance(data, dict):
 			header="9201"
 		elif isinstance(data, list):
 			header="2E01"
 	assert header in valid_headers, f"Unknown header {header}, expected one of {valid_headers}"
-	return header_encoders[header](data, debug)
+	return header_encoders[header](data, debug, kind)
