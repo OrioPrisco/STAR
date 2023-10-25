@@ -52,14 +52,14 @@ def	output_all(entries, header):
 	assert len(length) == 6, f"Error while encoding {data}, length too big"
 	return f"{header}{length}000000{''.join(entries)}"
 
-def	encode_9201(json_dict):
+def	encode_9201(json_dict, debug = False):
 	assert isinstance(json_dict, dict), f"9201 encoder can only encode dicts, not {type(json_dict).__name__}"
 	encoded_dict = []
 	for key in json_dict:
 		encoded_dict.append(encode_entry(key, json_dict[key]))
 	return output_all(encoded_dict, "9201")
 
-def	encode_2E01(json_array):
+def	encode_2E01(json_array, debug = False):
 	assert isinstance(json_array, list), f"2E01 encoder can only encode arrays, not {type(json_array).__name__}"
 	encoded_array = []
 	for item in json_array:
@@ -73,11 +73,11 @@ header_encoders = {
 
 valid_headers = header_encoders.keys()
 
-def encode_header(data, header):
+def encode_header(data, header, debug = False):
 	if header == None:
 		if isinstance(data, dict):
 			header="9201"
 		elif isinstance(data, list):
 			header="2E01"
 	assert header in valid_headers, f"Unknown header {header}, expected one of {valid_headers}"
-	return header_encoders[header](data)
+	return header_encoders[header](data, debug)
