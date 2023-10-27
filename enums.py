@@ -133,7 +133,7 @@ class Weapon(Enum):
 	grenade = 15 # SCRAPPED
 	skully = 100
 
-class Cartridge:
+class Cartridge(Enum):
 	magnifying_glass = 0
 	firecracker = 1
 	victory_sign = 2
