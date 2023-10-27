@@ -21,4 +21,5 @@ alternatively you can redirect the sandard input and or output
 *	`-i|--input input_file` read from `input_file` instead of stdin  
 *	`-v|--verbose` to display additional information on stderr  
 *	`-t|--type` to select the type of entries either `9201` or `2E01`  
+*	`-t|--type` to select the kind of list to decode (weapon/keyword/cartridge/upgrade)  
 *	`-h|--help` displays an help message
