@@ -11,6 +11,7 @@ enum_types = {
 	"weapon" : enums.Weapon,
 	"keyword" : enums.Keyword,
 	"upgrade" : enums.Upgrade,
+	"cartridge" : enums.Cartridge,
 }
 valid_headers = {"9201", "2E01"}
 
