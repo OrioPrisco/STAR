@@ -146,6 +146,9 @@ class Cartridge(Enum):
 	mining_hat = 9
 	rocket = 10
 	cloak = 11
+	syringe = 12
+	electrode = 13
+	trumpet = 14
 	dagger = 15
 	member_card = 16
 	pickaxe = 17
