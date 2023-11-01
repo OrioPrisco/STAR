@@ -30,7 +30,7 @@ class Keyword (Enum):
 	knockback = 5
 	giant = 6
 	reflective = 7
-	charges = 8
+	charges_faster = 8
 	wider = 9
 	chain = 10
 	shotgun = 11
