@@ -225,3 +225,11 @@ class Unique(Enum):
 	sacred_arms = 42
 	grasp_of_entropy = 43
 	edge_of_reality = 44
+
+class Ship(Enum):
+	null = 0
+	d_13 = 1
+	overlord = 2
+	chaos = 3
+	arena_blaster = 4
+	skully = 5
