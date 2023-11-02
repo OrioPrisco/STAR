@@ -274,3 +274,62 @@ class Active(Enum):
 	haunted_blaster = 36
 	king_s_ransom = 37
 	cleanup_crew = 38
+
+class Unlocks(Enum):
+	consecrated_weapons = 1003
+	antimagic_weapons = 1004
+	disrupting_weapons = 1006
+	akashic_weapons = 1005
+	swarmer_pack = 1029
+	sword = 1001
+	razor = 1002
+	pulsar = 1023
+	thunderhead = 1024
+	railgun = 1025
+	drill = 1026
+	spear = 1027
+	runic = 1028
+	deep_freeze_bombs = 1007
+	timebombs = 1009
+	laser_bombs = 1008
+	mirror_bomb = 1034
+	gold_bomb = 1035
+	energy_bomb = 1036
+	second_wind = 1010
+	care_package = 1030
+	""""
+	#non togglable ? off on new save presumably
+	1003.0,
+	1004.0,
+	1006.0,
+	1005.0,
+	1029.0,
+	1001.0,
+	1002.0,
+	1023.0,
+	1024.0,
+	1025.0,
+	1026.0,
+	1027.0,
+	1028.0,
+	1007.0,
+	1009.0,
+	1008.0,
+	1034.0,
+	1035.0,
+	1036.0,
+	1010.0
+	these must correspond to
+	seal 1 - 4
+	d13
+	loops ?
+	sword ship
+	chaos ship
+	aena blaster
+	skully
+	intensity
+	seeds
+	bestiary
+	mirror
+	more ?
+	"""
