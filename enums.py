@@ -275,7 +275,7 @@ class Active(Enum):
 	king_s_ransom = 37
 	cleanup_crew = 38
 
-class Unlocks(Enum):
+class Unlock(Enum):
 	sword = 1001
 	razor = 1002
 	consecrated_weapons = 1003
