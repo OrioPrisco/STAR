@@ -327,3 +327,16 @@ class Unlocks(Enum):
 	bow ???
 	more ?
 	"""
+
+class Bomb(Enum):
+	# 0 creates a glitched power bomb
+	laser = 1
+	deep_freeze = 2
+	time = 3
+	fire = 4
+	swarm = 5
+	excavation = 6
+	gold = 7
+	mirror = 8
+	energy = 9
+	shattering = 10
