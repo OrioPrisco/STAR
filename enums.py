@@ -340,3 +340,17 @@ class Bomb(Enum):
 	mirror = 8
 	energy = 9
 	shattering = 10
+
+class Blessing(Enum):
+	flame = 0
+	frost = 1
+	earth = 2
+	storm = 3
+	sight = 4
+	abyss = 5
+	enigma = 6
+
+class Blessed(Enum):
+	normal = -1
+	blessed = 0
+	cursed = 1
