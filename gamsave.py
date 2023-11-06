@@ -1,0 +1,48 @@
+#!/bin/python3
+
+import encode as en
+import decode as dc
+import argparse
+import json
+import sys
+import enums
+import base64
+
+
+enums = {
+	"Upgrade" : enums.Upgrade,
+	"Keyword"  : enums.Keyword,
+	"Floor" : enums.Floor,
+	"Weapon" : enums.Weapon,
+	"Cartridge" : enums.Cartridge,
+	"Unique" : enums.Unique,
+	"Ship" : enums.Ship,
+	"Active" : enums.Active,
+	"Unlock" : enums.Unlock,
+	"Bomb" : enums.Bomb,
+	"Blessing" : enums.Blessing,
+	"Blessed" : enums.Blessed,
+}
+
+line_decoders = {
+	"int" : [int, str],
+	"bool" : [int, str],
+	"enum" : [int, str],
+	"float" : [float, str],
+	"string" : [str, str],
+	"2E01" : [dc.decode_2E01, en.encode_2E01],
+	"9201" : [dc.decode_9201, en.encode_9201],
+	"space separated decimal" : [str, str],
+	"bitfield" : [int, str],
+}
+
+if __name__ == "__main__":
+	schema = json.load(open("gamesave-schema.json", "r"))
+	lines = base64.b64decode("".join(open("gamesave.d13", "r").readlines()))
+	lines = lines.decode("utf8").split("\r\n")
+	output = {}
+	for key in schema:
+		item = lines.pop(0)
+		#print(key, item)
+		output[key] = line_decoders[schema[key]["type"]][0](item)
+	print(json.dumps(output, indent=4))
