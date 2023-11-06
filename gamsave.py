@@ -38,12 +38,20 @@ line_decoders = {
 }
 
 if __name__ == "__main__":
-	lines = base64.b64decode("".join(open("gamesave.d13", "r").readlines()))
+	parser = argparse.ArgumentParser()
+	parser.add_argument("-i", "--input", required=False, type=argparse.FileType('r'), default=sys.stdin)
+	parser.add_argument("-d", "--decode", required=False, action='store_true', default=False)
+	parser.add_argument("-v", "--verbose", required=False, action='store_true', default=False)
+	#option for passing custom schema ?
+	args = parser.parse_args()
+	script_dir = os.path.abspath( os.path.dirname( __file__ ) )
 	schema = json.load(open(os.path.join(script_dir, "gamesave-schema.json"), "r"))
+	lines = base64.b64decode("".join(args.input.readlines()))
 	lines = lines.decode("utf8").splitlines()
 	output = {}
 	for key in schema:
 		item = lines.pop(0)
-		#print(key, item)
+		if (args.verbose):
+			print(key, item, file=sys.stderr)
 		output[key] = line_decoders[schema[key]["type"]][0](item)
 	print(json.dumps(output, indent=4))
