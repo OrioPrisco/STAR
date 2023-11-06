@@ -46,12 +46,21 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 	script_dir = os.path.abspath( os.path.dirname( __file__ ) )
 	schema = json.load(open(os.path.join(script_dir, "gamesave-schema.json"), "r"))
-	lines = base64.b64decode("".join(args.input.readlines()))
-	lines = lines.decode("utf8").splitlines()
-	output = {}
-	for key in schema:
-		item = lines.pop(0)
-		if (args.verbose):
-			print(key, item, file=sys.stderr)
-		output[key] = line_decoders[schema[key]["type"]][0](item)
-	print(json.dumps(output, indent=4))
+	if args.decode:
+		lines = base64.b64decode("".join(args.input.readlines()))
+		lines = lines.decode("utf8").splitlines()
+		output = {}
+		for key in schema:
+			item = lines.pop(0)
+			if (args.verbose):
+				print(key, item, file=sys.stderr)
+			output[key] = line_decoders[schema[key]["type"]][0](item)
+		print(json.dumps(output, indent=4))
+	else:
+		input_dir = json.load(args.input)
+		output = []
+		for key in schema:
+			output.append(line_decoders[schema[key]["type"]][1](input_dir[key]))
+		output = "\n".join(output)
+		output = base64.b64encode(output.encode("utf8"))
+		print(output.decode("utf8"))
