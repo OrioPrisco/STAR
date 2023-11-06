@@ -321,9 +321,6 @@ class Unlock(Enum):
 	intensity
 	seeds
 	bestiary
-	mirror
-	bestiary
-	mirror
 	bow ???
 	more ?
 	"""
