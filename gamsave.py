@@ -25,7 +25,7 @@ enums = {
 	"Blessed" : enums.Blessed,
 }
 
-line_decoders = {
+line_handlers = {
 	"int" : [int, str],
 	"bool" : [int, str],
 	"enum" : [int, str],
@@ -54,13 +54,13 @@ if __name__ == "__main__":
 			item = lines.pop(0)
 			if (args.verbose):
 				print(key, item, file=sys.stderr)
-			output[key] = line_decoders[schema[key]["type"]][0](item)
+			output[key] = line_handlers[schema[key]["type"]][0](item)
 		print(json.dumps(output, indent=4))
 	else:
 		input_dir = json.load(args.input)
 		output = []
 		for key in schema:
-			output.append(line_decoders[schema[key]["type"]][1](input_dir[key]))
+			output.append(line_handlers[schema[key]["type"]][1](input_dir[key]))
 		output = "\n".join(output)
 		output = base64.b64encode(output.encode("utf8"))
 		print(output.decode("utf8"))
