@@ -39,7 +39,7 @@ line_decoders = {
 if __name__ == "__main__":
 	schema = json.load(open("gamesave-schema.json", "r"))
 	lines = base64.b64decode("".join(open("gamesave.d13", "r").readlines()))
-	lines = lines.decode("utf8").split("\r\n")
+	lines = lines.decode("utf8").splitlines()
 	output = {}
 	for key in schema:
 		item = lines.pop(0)
