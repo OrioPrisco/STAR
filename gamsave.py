@@ -11,18 +11,18 @@ import base64
 
 
 enums = {
-	"Upgrade" : enums.Upgrade,
-	"Keyword"  : enums.Keyword,
-	"Floor" : enums.Floor,
-	"Weapon" : enums.Weapon,
-	"Cartridge" : enums.Cartridge,
-	"Unique" : enums.Unique,
-	"Ship" : enums.Ship,
-	"Active" : enums.Active,
-	"Unlock" : enums.Unlock,
-	"Bomb" : enums.Bomb,
-	"Blessing" : enums.Blessing,
-	"Blessed" : enums.Blessed,
+	"upgrade" : enums.Upgrade,
+	"keyword"  : enums.Keyword,
+	"floor" : enums.Floor,
+	"weapon" : enums.Weapon,
+	"cartridge" : enums.Cartridge,
+	"unique" : enums.Unique,
+	"ship" : enums.Ship,
+	"active" : enums.Active,
+	"unlock" : enums.Unlock,
+	"bomb" : enums.Bomb,
+	"blessing" : enums.Blessing,
+	"blessed" : enums.Blessed,
 }
 
 line_handlers = {
