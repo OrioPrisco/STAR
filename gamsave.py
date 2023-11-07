@@ -129,15 +129,15 @@ def encode_bitfield_wrapper(value, debug, **kwargs):
 	return value
 
 line_handlers = {
-	"int" : [int, str],
-	"bool" : [int, str],
-	"enum" : [int, str],
-	"float" : [float, str],
-	"string" : [str, str],
-	"2E01" : [dc.decode_2E01, en.encode_2E01],
-	"9201" : [dc.decode_9201, en.encode_9201],
-	"space separated decimal" : [str, str],
-	"bitfield" : [int, str],
+	"int" : [decode_int_wrapper, encode_int_wrapper],
+	"bool" : [decode_bool_wrapper, encode_bool_wrapper],
+	"enum" : [decode_enum_wrapper, encode_enum_wrapper],
+	"float" : [decode_float_wrapper, encode_float_wrapper],
+	"string" : [decode_string_wrapper, encode_string_wrapper],
+	"2E01" : [decode_2E01_wrapper, encode_2E01_wrapper],
+	"9201" : [decode_9201_wrapper, encode_9201_wrapper],
+	"space separated decimal" : [decode_space_separated_decimal_wrapper, encode_space_separated_decimal_wrapper],
+	"bitfield" : [decode_bitfield_wrapper, encode_bitfield_wrapper],
 }
 
 if __name__ == "__main__":
@@ -157,13 +157,15 @@ if __name__ == "__main__":
 			item = lines.pop(0)
 			if (args.verbose):
 				print(key, item, file=sys.stderr)
-			output[key] = line_handlers[schema[key]["type"]][0](item)
+			output[key] = line_handlers[schema[key]["type"]][0](item, args.verbose, **schema[key])
 		print(json.dumps(output, indent=4))
 	else:
 		input_dir = json.load(args.input)
 		output = []
 		for key in schema:
-			output.append(line_handlers[schema[key]["type"]][1](input_dir[key]))
+			if (args.verbose):
+				print(key, file=sys.stderr)
+			output.append(line_handlers[schema[key]["type"]][1](input_dir[key], args.verbose, **schema[key]))
 		output = "\n".join(output)
 		output = base64.b64encode(output.encode("utf8"))
 		print(output.decode("utf8"))
