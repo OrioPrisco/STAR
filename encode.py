@@ -58,7 +58,7 @@ def	encode_9201(json_dict, debug = False, _ = None):
 	encoded_dict = []
 	for key in json_dict:
 		encoded_dict.append(encode_entry(key, json_dict[key]))
-	return output_all(encoded_dict, "9201")
+	return output_all(encoded_dict, "9201"), False
 
 def	try_int_from_enum(value, kind=None):
 	if (isinstance(value, int)) or isinstance(value, float):
@@ -73,15 +73,17 @@ def	try_int_from_enum(value, kind=None):
 def	encode_2E01(json_array, debug = False, kind = None):
 	assert isinstance(json_array, list), f"2E01 encoder can only encode arrays, not {type(json_array).__name__}"
 	encoded_array = []
+	err = False
 	for item in json_array:
 		item_as_int = try_int_from_enum(item, kind)
 		if item_as_int == None:
+			err = True
 			if debug:
 				print(f"Warning, couldn't convert {item} to an integer value", file=sys.stderr)
 		else:
 			item = item_as_int
 		encoded_array.append(encode_data(item))
-	return output_all(encoded_array, "2E01")
+	return output_all(encoded_array, "2E01"), err
 
 header_encoders = {
 	"9201" : encode_9201,

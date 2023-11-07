@@ -44,7 +44,8 @@ if __name__ == "__main__":
 			json_obj, offset = decoder.raw_decode(inputs)
 			if args.verbose:
 				print(f"{offset} characters to decode", file=sys.stderr)
-			print(en.encode_header(json_obj, args.type, args.verbose, args.kind))
+			line, err = en.encode_header(json_obj, args.type, args.verbose, args.kind)
+			print(line)
 			inputs = inputs[offset:].strip()
 			if args.verbose:
 				print(f"now decoding `{inputs}`", file=sys.stderr)
