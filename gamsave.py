@@ -73,8 +73,15 @@ def decode_space_separated_decimal_wrapper(value, debug, **kwargs):
 	return [int(i) for i in value.split()]
 
 def decode_bitfield_wrapper(value, debug, **kwargs):
-	#TODO : properly implement
-	return value
+	value = int(value)
+	i = 0
+	output = []
+	while (1 << i) <= value:
+		bit_value = (1 << i) & value
+		if bit_value:
+			output.append(decode_enum_wrapper(i, debug, **kwargs))
+		i += 1
+	return output
 
 def encode_int_wrapper(value, debug, **kwargs):
 	assert isinstance(value, (int, float)), f"number required but got {type(value).__name__}"
@@ -88,14 +95,17 @@ def encode_bool_wrapper(value, debug, **kwargs):
 		dbg_print(debug, f"Warning, {value} is not a boolean value !")
 	return str(value)
 
-def encode_enum_wrapper(value, debug, **kwargs):
+def encode_enum(value, debug, **kwargs):
 	assert isinstance(value, (int, float, str)), f"number/string required but got {type(value).__name__}"
 	kind = get_kind(**kwargs)
 	if (kind == None):
 		dbg_print(debug, f"Unknown kind {kwargs.get('kind', 'None')}")
 	value = en.try_int_from_enum(value, kind)
 	assert value != None, f"Couldn't convert {value} to an integer id with kind {kind.__name__ if kind else 'None'}"
-	return str(value)
+	return value
+
+def encode_enum_wrapper(value, debug, **kwargs):
+	return str(encode_enum(value, debug, **kwargs))
 
 def encode_float_wrapper(value, debug, **kwargs):
 	assert isinstance(value, (int, float)), f"number required but got {type(value).__name__}"
@@ -125,8 +135,13 @@ def encode_space_separated_decimal_wrapper(value, debug, **kwargs):
 
 
 def encode_bitfield_wrapper(value, debug, **kwargs):
-	#TODO : implement
-	return value
+	assert isinstance(value, list), f"list required but got {type(value).__name__}"
+	output = 0
+	for item in value:
+		decoded_int = encode_enum(item, debug, **kwargs)
+		assert isinstance(decoded_int, (int, float)), f"Cannot insert non integer value {decoded_int} into a bitfield"
+		output |= 1 << decoded_int
+	return str(output)
 
 line_handlers = {
 	"int" : [decode_int_wrapper, encode_int_wrapper],
