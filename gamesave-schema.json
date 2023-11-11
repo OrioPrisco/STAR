@@ -58,7 +58,7 @@
 "temple data" : {"type" : "9201"},
 "floor" : {"type" :"enum", "kind" : "Floor"},
 "hardmode" : {"type" : "bool"},
-"lethality" : {"type" : "enum", "TODO ADD KIND" : "lethality"},
+"lethality" : {"type" : "enum", "kind" : "lethality"},
 "unknown value line 62" : {"type" : "int"},
 "times hit" : {"type" : "int"},
 "rooms explored" : {"type" : "int"},

@@ -23,6 +23,7 @@ enums = {
 	"bomb" : enums.Bomb,
 	"blessing" : enums.Blessing,
 	"blessed" : enums.Blessed,
+	"lethality" : enums.Lethality
 }
 
 def get_kind(**kwargs):

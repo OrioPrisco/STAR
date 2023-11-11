@@ -351,3 +351,8 @@ class Blessed(Enum):
 	normal = -1
 	blessed = 0
 	cursed = 1
+
+class Lethality(Enum):
+	mild = 0
+	intense = 1
+	sudden_death = 2
