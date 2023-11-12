@@ -80,7 +80,7 @@
 "weapon damage" : {"type" : "float"},
 "ammo divisor" : {"type" : "float"},
 "unknown value line 82" : {"type" : "int"},
-"projectile speed" : {"type" : "int"},
+"projectile speed" : {"type" : "float"},
 "firerate" : {"type" : "float"},
 "unknown value line 85" : {"type" : "int"},
 "unknown value line 86" : {"type" : "int"},
