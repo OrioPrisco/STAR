@@ -177,7 +177,11 @@ if __name__ == "__main__":
 			item = lines.pop(0)
 			if (args.verbose):
 				print(key, item, file=sys.stderr)
-			output[key] = line_handlers[schema[key]["type"]][0](item, args.verbose, **schema[key])
+			try:
+				output[key] = line_handlers[schema[key]["type"]][0](item, args.verbose, **schema[key])
+			except Exception as e:
+				print(f"Error when decoding field {key}", file=sys.stderr)
+				raise e
 		print(json.dumps(output, indent=4))
 	else:
 		try:
@@ -189,7 +193,11 @@ if __name__ == "__main__":
 		for key in schema:
 			if (args.verbose):
 				print(key, file=sys.stderr)
-			output.append(line_handlers[schema[key]["type"]][1](input_dir[key], args.verbose, **schema[key]))
+			try:
+				output.append(line_handlers[schema[key]["type"]][1](input_dir[key], args.verbose, **schema[key]))
+			except Exception as e:
+				print(f"Error when encoding field {key}", file=sys.stderr)
+				raise e
 		output = "\n".join(output)
 		output = base64.b64encode(output.encode("utf8"))
 		print(output.decode("utf8"))
