@@ -348,8 +348,8 @@ class Blessing(Enum):
 	enigma = 6
 
 class Blessed(Enum):
-	normal = -1
-	blessed = 0
+	blessed = -1
+	normal = 0
 	cursed = 1
 
 class Lethality(Enum):
