@@ -166,7 +166,11 @@ if __name__ == "__main__":
 	script_dir = os.path.abspath( os.path.dirname( __file__ ) )
 	schema = json.load(open(os.path.join(script_dir, "gamesave-schema.json"), "r"))
 	if args.decode:
-		lines = base64.b64decode("".join(args.input.readlines()))
+		try:
+			lines = base64.b64decode("".join(args.input.readlines()))
+		except binascii.Error as e:
+			print(f"Couldn't decode the base64 file. Corrupted file or did you mean to encode ?", file=sys.stderr)
+			raise e
 		lines = lines.decode("utf8").splitlines()
 		output = {}
 		for key in schema:
@@ -176,7 +180,11 @@ if __name__ == "__main__":
 			output[key] = line_handlers[schema[key]["type"]][0](item, args.verbose, **schema[key])
 		print(json.dumps(output, indent=4))
 	else:
-		input_dir = json.load(args.input)
+		try:
+			input_dir = json.load(args.input)
+		except json.decoder.JSONDecodeError as e:
+			print(f"Couldn't decode the json file. Bad json format or did you mean to decode ?", file=sys.stderr)
+			raise e
 		output = []
 		for key in schema:
 			if (args.verbose):
