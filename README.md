@@ -10,6 +10,22 @@ Python scripts to decode Star of Providence, (formerly known as Monolith) save f
 Download the repo with `https://github.com/OrioPrisco/monolith-savefile` or by using the download zip button  
 open a terminal in the extracted/cloned folder  
 
+to decode a gamesave.d13 file execute `python3 gamsave.py -d -i PATH_TO_GAMESAVE_D13`.  
+This will output a json file to your terminal, You can put it int oa text editor and modify your savefile.  
+Once you are done editing save it somewhere and do `python3 gamsave.py -i PATH_TO_JSON_FILE`  
+This will output the gaemsave.d13 file to your terminal  
+
+## Options
+*	`-i|--input input_file` read from `input_file` instead of stdin  
+*	`-d|--decode` decode a savefile instead of encoding it  
+*	`-v|--verbose` to display additional information on stderr  
+*	`-h|--help` displays an help message
+
+## Manual decoding
+
+The savefile is a base64 encoded file, with some lines starting with `2E01` or `9201`.  
+To decode these lines you can use the `transform.py` script.  
+
 to decode execute `python3 transform.py -d` then paste one or more line of `9201` and/or `2E01` from a monolith savefile
 to encode execute `python3 transform.py` then paste one ore more decoded line
 
