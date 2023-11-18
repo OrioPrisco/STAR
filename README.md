@@ -11,7 +11,7 @@ Download the repo with `https://github.com/OrioPrisco/monolith-savefile` or by u
 open a terminal in the extracted/cloned folder  
 
 to decode execute `python3 transform.py -d` then paste one or more line of `9201` and/or `2E01` from a monolith savefile
-to encode execue `python3 transform.py` then paste one ore more decoded line
+to encode execute `python3 transform.py` then paste one ore more decoded line
 
 ater either of those commands, send EOF (CTRL+Z ENTER on windows/CTRL+D on unix like oses)  
   
