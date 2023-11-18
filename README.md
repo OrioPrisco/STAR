@@ -29,7 +29,7 @@ To decode these lines you can use the `transform.py` script.
 to decode execute `python3 transform.py -d` then paste one or more line of `9201` and/or `2E01` from a monolith savefile
 to encode execute `python3 transform.py` then paste one ore more decoded line
 
-ater either of those commands, send EOF (CTRL+Z ENTER on windows/CTRL+D on unix like oses)  
+after either of those commands, send EOF (CTRL+Z ENTER on windows/CTRL+D on unix like oses)  
   
 alternatively you can redirect the sandard input and or output  
   
