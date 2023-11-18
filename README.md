@@ -1,6 +1,6 @@
 # monolith-savefile
 
-Python scripts to decode and reencode `9201` and `2E01` entries from monolith save files
+Python scripts to decode Star of Providence, (formerly known as Monolith) save files
 
 ## requirements
 - python3
