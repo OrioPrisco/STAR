@@ -1,6 +1,7 @@
-# monolith-savefile
+# Savefile Tool : Alpha Release
 
-Python scripts to decode Star of Providence, (formerly known as Monolith) save files
+Python scripts to decode Star of Providence, (formerly known as Monolith) save files  
+This is an alpha, Some values are not yet documented and there might bugs
 
 ## requirements
 - python3
