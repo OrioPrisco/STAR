@@ -8,7 +8,7 @@ This is an alpha, Some values are not yet documented and there might bugs
 
 ## How to use
 
-Download the repo with `https://github.com/OrioPrisco/monolith-savefile` or by using the download zip button  
+Download the repo with git or by using the download zip button  
 open a terminal in the extracted/cloned folder  
 
 to decode a gamesave.d13 file execute `python3 gamsave.py -d -i PATH_TO_GAMESAVE_D13`.  
