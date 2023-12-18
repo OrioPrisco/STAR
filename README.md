@@ -11,9 +11,9 @@ This is an alpha, Some values are not yet documented and there might bugs
 Download the repo with git or by using the download zip button  
 open a terminal in the extracted/cloned folder  
 
-to decode a gamesave.d13 file execute `python3 gamsave.py -d -i PATH_TO_GAMESAVE_D13`.  
+to decode a gamesave.d13 file execute `python3 gamesave.py -d -i PATH_TO_GAMESAVE_D13`.  
 This will output a json file to your terminal, You can put it into a text editor and modify your savefile.  
-Once you are done editing save it somewhere and do `python3 gamsave.py -i PATH_TO_JSON_FILE`  
+Once you are done editing save it somewhere and do `python3 gamesave.py -i PATH_TO_JSON_FILE`  
 This will output the gamesave.d13 file to your terminal  
 
 ## Options
