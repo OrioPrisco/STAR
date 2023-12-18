@@ -3,6 +3,12 @@
 Python scripts to decode Star of Providence, (formerly known as Monolith) save files  
 This is an alpha, Some values are not yet documented and there might bugs
 
+## ⚠️ Warning ⚠️
+
+The Run savefile contains some information that gets copied back to your permanent savefile when you end/quit the run  
+For this reason, it is not recommended that you load previous run files and that you only load savefiles that you created  
+Doing otherwise might release in data loss (I've experienced some of it myself)
+
 ## requirements
 - python3
 
