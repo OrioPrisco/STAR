@@ -21,6 +21,7 @@ to decode a gamesave.d13 file execute `python3 gamesave.py -d -i PATH_TO_GAMESAV
 This will output a json file to your terminal, You can put it into a text editor and modify your savefile.  
 Once you are done editing save it somewhere and do `python3 gamesave.py -i PATH_TO_JSON_FILE`  
 This will output the gamesave.d13 file to your terminal  
+If the commands do not work try replacing `python3` with `python`
 
 ## Options
 *	`-i|--input input_file` read from `input_file` instead of stdin  
