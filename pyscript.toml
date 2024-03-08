@@ -1,0 +1,7 @@
+name = "PyScript Jokes"
+packages = []
+[files]
+"./gamesave.py" = "./gamesave.py"
+"./decode.py" = "./decode.py"
+"./encode.py" = "./encode.py"
+"./enums.py" = "./enums.py"
