@@ -156,6 +156,44 @@ line_handlers = {
 	"bitfield" : [decode_bitfield_wrapper, encode_bitfield_wrapper],
 }
 
+def decode_file(b64lines, schema, verbose):
+	try:
+		lines = base64.b64decode(b64lines)
+	except binascii.Error as e:
+		print(f"Couldn't decode the base64 file. Corrupted file or did you mean to encode ?", file=sys.stderr)
+	output = {}
+	lines = lines.decode("utf8").splitlines()
+	for key in schema:
+		item = lines.pop(0)
+		if (verbose):
+			print(key, item, file=sys.stderr)
+		try:
+			output[key] = line_handlers[schema[key]["type"]][0](item, verbose, **schema[key])
+		except Exception as e:
+			print(f"Error when decoding field {key}", file=sys.stderr)
+			raise e
+	return output
+
+def encode_file(jsonlines, schema, verbose):
+	try:
+		input_dir = json.loads(jsonlines)
+	except json.decoder.JSONDecodeError as e:
+		print(f"Couldn't decode the json file. Bad json format or did you mean to decode ?", file=sys.stderr)
+		raise e
+	output = []
+	for key in schema:
+		if (verbose):
+			print(key, file=sys.stderr)
+		try:
+			output.append(line_handlers[schema[key]["type"]][1](input_dir[key], verbose, **schema[key]))
+		except Exception as e:
+			print(f"Error when encoding field {key}", file=sys.stderr)
+			raise e
+	output = "\n".join(output)
+	output = base64.b64encode(output.encode("utf8"))
+	return output.decode("utf8")
+
+
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-i", "--input", required=False, type=argparse.FileType('r'), default=sys.stdin)
@@ -166,38 +204,10 @@ if __name__ == "__main__":
 	script_dir = os.path.abspath( os.path.dirname( __file__ ) )
 	schema = json.load(open(os.path.join(script_dir, "gamesave-schema.json"), "r"))
 	if args.decode:
-		try:
-			lines = base64.b64decode("".join(args.input.readlines()))
-		except binascii.Error as e:
-			print(f"Couldn't decode the base64 file. Corrupted file or did you mean to encode ?", file=sys.stderr)
-			raise e
-		lines = lines.decode("utf8").splitlines()
-		output = {}
-		for key in schema:
-			item = lines.pop(0)
-			if (args.verbose):
-				print(key, item, file=sys.stderr)
-			try:
-				output[key] = line_handlers[schema[key]["type"]][0](item, args.verbose, **schema[key])
-			except Exception as e:
-				print(f"Error when decoding field {key}", file=sys.stderr)
-				raise e
+		b64lines = "".join(args.input.readlines())
+		output = decode_file(b64lines, schema, args.verbose)
 		print(json.dumps(output, indent=4))
 	else:
-		try:
-			input_dir = json.load(args.input)
-		except json.decoder.JSONDecodeError as e:
-			print(f"Couldn't decode the json file. Bad json format or did you mean to decode ?", file=sys.stderr)
-			raise e
-		output = []
-		for key in schema:
-			if (args.verbose):
-				print(key, file=sys.stderr)
-			try:
-				output.append(line_handlers[schema[key]["type"]][1](input_dir[key], args.verbose, **schema[key]))
-			except Exception as e:
-				print(f"Error when encoding field {key}", file=sys.stderr)
-				raise e
-		output = "\n".join(output)
-		output = base64.b64encode(output.encode("utf8"))
-		print(output.decode("utf8"))
+		jsonlines = "".join(args.input.readlines())
+		output = encode_file(jsonlines, schema, args.verbose)
+		print(output)
