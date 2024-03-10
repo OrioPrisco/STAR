@@ -5,3 +5,4 @@ packages = []
 "./decode.py" = "./decode.py"
 "./encode.py" = "./encode.py"
 "./enums.py" = "./enums.py"
+"./gamesave-schema.json" = "./gamesave-schema.json"
