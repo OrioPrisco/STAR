@@ -15,22 +15,21 @@
 			loading.showModal();
 		</script>
 	</head>
-
 	<body>
 		<dialog id="loading">
 			<h1>Loading...</h1>
 		</dialog>
-
-
-		<section class="pyscript">
-			<button id="decode_gamesave" py-click="decode_gamesave">Decode gamesave</button>
-			<button id="encode_json" py-click="encode_json">Encode Json</button>
-
-			<input id="input"></input>
-			<pre id="output"></pre>
-			<script type="py" src="./main.py" config="./pyscript.toml"></script>
-		</section>
-
+		<div style="width:90%; margin: auto">
+			<section class="pyscript" style="display:inline-block; width:100%;">
+				<textarea id="input" style="width:100%;height:40%"></textarea>
+				<div>
+					<button id="decode_gamesave" py-click="decode_gamesave">Decode gamesave</button>
+					<button id="encode_json" py-click="encode_json">Encode Json</button>
+				</div>
+				<textarea id="output" style="width:100%;height:40%;"></textarea>
+				<script type="py" src="./main.py" config="./pyscript.toml"></script>
+			</section>
+		</div>
 	</body>
 </html>
 
