@@ -8,6 +8,7 @@ import sys
 import os
 import enums
 import base64
+import binascii
 
 
 enums = {
