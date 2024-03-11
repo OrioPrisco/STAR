@@ -162,6 +162,7 @@ def decode_file(b64lines, schema, verbose):
 		lines = base64.b64decode(b64lines)
 	except binascii.Error as e:
 		print(f"Couldn't decode the base64 file. Corrupted file or did you mean to encode ?", file=sys.stderr)
+		raise e
 	output = {}
 	lines = lines.decode("utf8").splitlines()
 	for key in schema:
