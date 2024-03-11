@@ -10,7 +10,7 @@
 		<style>
 			#loading { outline: none; border: none; background: transparent }
 			html, body, .full_height { height : 100%; }
-			textarea { height : 47%; width : 100%; }
+			textarea { width : 100%; flex-grow : 1; }
 			h1 { text-align : center; }
 		</style>
 		<script type="module">
@@ -24,8 +24,8 @@
 			<h1>Loading...</h1>
 		</dialog>
 		<h1>STAR: savefile tool for Star of Providence</h1>
-		<div style="height:85%; width:90%; margin: auto">
-			<section class="pyscript full_height" style="display:inline-block; width:100%;">
+		<div style="height:85%; width:90%; margin: auto;">
+			<section class="pyscript full_height" style="display:flex; flex-flow:column; width:100%;">
 				<textarea id="input" ></textarea>
 				<div>
 					<button py-click="decode_gamesave">Decode gamesave</button>
