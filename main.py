@@ -3,6 +3,7 @@ import gamesave
 import json
 
 def decode_gamesave(event):
+	pydom["#output"][0].html = ""
 	schema = json.load(open("./gamesave-schema.json", "r"))
 	gamesave_lines = pydom["#input"][0].value
 	print(gamesave_lines)
