@@ -9,6 +9,9 @@
 		<!-- for splashscreen -->
 		<style>
 			#loading { outline: none; border: none; background: transparent }
+			html, body, .full_height { height : 100%; }
+			textarea { height : 47%; width : 100%; }
+			h1 { text-align : center; }
 		</style>
 		<script type="module">
 			const loading = document.getElementById('loading');
@@ -20,10 +23,10 @@
 		<dialog id="loading">
 			<h1>Loading...</h1>
 		</dialog>
-		<h1 style="text-align:center;">STAR: savefile tool for Star of Providence</h1>
-		<div style="width:90%; margin: auto">
-			<section class="pyscript" style="display:inline-block; width:100%;">
-				<textarea id="input" style="width:100%;height:40%"></textarea>
+		<h1>STAR: savefile tool for Star of Providence</h1>
+		<div style="height:85%; width:90%; margin: auto">
+			<section class="pyscript full_height" style="display:inline-block; width:100%;">
+				<textarea id="input" ></textarea>
 				<div>
 					<button py-click="decode_gamesave">Decode gamesave</button>
 					<button py-click="encode_json">Encode Json</button>
@@ -34,7 +37,7 @@
 						Copy to clipboard
 					</button>
 				</div>
-				<textarea id="output" style="width:100%;height:40%;"></textarea>
+				<textarea id="output"></textarea>
 				<script type="py" src="./main.py" config="./pyscript.toml"></script>
 			</section>
 		</div>
