@@ -1,9 +1,18 @@
 from pyweb import pydom
 import gamesave
 import json
+from pyscript import window, document
+
+def clean_output_and_errors():
+	pydom["#output"][0].html = ""
+	nodes = document.querySelectorAll(".py-error")
+	print(nodes)
+	if nodes:
+		for node in nodes:
+			node.remove()
 
 def decode_gamesave(event):
-	pydom["#output"][0].html = ""
+	clean_output_and_errors()
 	schema = json.load(open("./gamesave-schema.json", "r"))
 	gamesave_lines = pydom["#input"][0].value
 	print(gamesave_lines)
@@ -12,7 +21,7 @@ def decode_gamesave(event):
 	pydom["#output"][0].html = json.dumps(decoded, indent=4)
 
 def encode_json(event):
-	pydom["#output"][0].html = ""
+	clean_output_and_errors()
 	schema = json.load(open("./gamesave-schema.json", "r"))
 	json_lines = pydom["#input"][0].value
 	print(json_lines)
