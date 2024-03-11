@@ -6,7 +6,6 @@ from pyscript import window, document
 def clean_output_and_errors():
 	pydom["#output"][0].html = ""
 	nodes = document.querySelectorAll(".py-error")
-	print(nodes)
 	if nodes:
 		for node in nodes:
 			node.remove()
@@ -15,16 +14,12 @@ def decode_gamesave(event):
 	clean_output_and_errors()
 	schema = json.load(open("./gamesave-schema.json", "r"))
 	gamesave_lines = pydom["#input"][0].value
-	print(gamesave_lines)
 	decoded = gamesave.decode_file(gamesave_lines, schema, False)
-	print(decoded)
 	pydom["#output"][0].html = json.dumps(decoded, indent=4)
 
 def encode_json(event):
 	clean_output_and_errors()
 	schema = json.load(open("./gamesave-schema.json", "r"))
 	json_lines = pydom["#input"][0].value
-	print(json_lines)
 	encoded = gamesave.encode_file(json_lines, schema, False)
-	print(encoded)
 	pydom["#output"][0].html = encoded
