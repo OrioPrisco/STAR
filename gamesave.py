@@ -164,7 +164,11 @@ def decode_file(b64lines, schema, verbose):
 		print(f"Couldn't decode the base64 file. Corrupted file or did you mean to encode ?", file=sys.stderr)
 		raise e
 	output = {}
-	lines = lines.decode("utf8").splitlines()
+	try:
+		lines = lines.decode("utf8").splitlines()
+	except UnicodeDecodeError as e:
+		print(f"Couldn't decode the base64 file as utf8. Corrupted file ?", file=sys.stderr)
+		raise e
 	for key in schema:
 		item = lines.pop(0)
 		if (verbose):
