@@ -12,11 +12,28 @@
 			html, body, .full_height { height : 100%; }
 			textarea { width : 100%; flex-grow : 1; }
 			h1 { text-align : center; }
+			.file { display:none }
 		</style>
 		<script type="module">
 			const loading = document.getElementById('loading');
 			addEventListener('py:ready', () => loading.close());
 			loading.showModal();
+		</script>
+		<!-- upload button -->
+		<script>
+			function on_upload() {
+				document.getElementById("input").value = "loading...";
+				var reader = new FileReader();
+				reader.readAsText(this.files[0], "UTF-8");
+				reader.onload = (evt) => {document.getElementById("input").value = evt.target.result};
+				reader.onerror = (evt) => {
+					console.log(evt);
+					document.getElementById("input").value = "Error check console for further info";
+				};
+			}
+			window.onload = () => {
+				document.getElementById("upload").addEventListener("change", on_upload);
+			}
 		</script>
 	</head>
 	<body>
@@ -36,6 +53,8 @@
 						)}">
 						Copy to clipboard
 					</button>
+					<input class="file" type="file" id="upload" accept=".json, .d13"></input>
+					<button onclick="document.getElementById('upload').click()">Upload</button>
 				</div>
 				<textarea id="output"></textarea>
 				<script type="py" src="./main.py" config="./pyscript.toml"></script>
