@@ -6,11 +6,25 @@
 		<!-- This script tag bootstraps PyScript -->
 		<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 		<style>
+			textarea {
+				--default-color: black;
+				--highlight-color: gold;
+				border-color : var(--default-color);
+			}
 			#loading { outline: none; border: none; background: transparent }
 			html, body, .full_height { height : 100%; }
 			textarea { width : 100%; flex-grow : 1; }
 			h1 { text-align : center; }
 			.file { display:none }
+			@keyframes highlight {
+				0% {border-color: var(--default-color);}
+				10% {border-color: var(--highlight-color);}
+				20% {border-color: var(--highlight-color);}
+				100% {border-color: var(--default-color);}
+			}
+			.highlight {
+				animation : highlight 3s;
+			}
 		</style>
 		<!-- for splashscreen -->
 		<script type="module">
@@ -20,11 +34,21 @@
 		</script>
 		<!-- upload button -->
 		<script>
+			function highlight_elem(elem) {
+				elem.classList.remove('highlight');
+				void elem.offsetWidth;
+				elem.classList.add('highlight');
+			}
 			function on_upload() {
 				document.getElementById("input").value = "loading...";
 				var reader = new FileReader();
 				reader.readAsText(this.files[0], "UTF-8");
-				reader.onload = (evt) => {document.getElementById("input").value = evt.target.result};
+				reader.onload = (evt) => {
+					textarea = document.getElementById("input")
+					textarea.value = evt.target.result
+					textarea.scrollTop = 0
+					highlight_elem(textarea);
+				};
 				reader.onerror = (evt) => {
 					console.log(evt);
 					document.getElementById("input").value = "Error check console for further info";
