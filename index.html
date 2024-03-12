@@ -48,6 +48,12 @@
 					textarea.value = evt.target.result
 					textarea.scrollTop = 0
 					highlight_elem(textarea);
+					if (this.files[0].name.endsWith(".json")) {
+						document.getElementById('encode').click();
+					}
+					else if (this.files[0].name.endsWith(".d13")) {
+						document.getElementById('decode').click();
+					}
 				};
 				reader.onerror = (evt) => {
 					console.log(evt);
@@ -68,8 +74,8 @@
 			<section class="pyscript full_height" style="display:flex; flex-flow:column; width:100%;">
 				<textarea id="input" ></textarea>
 				<div>
-					<button py-click="decode_gamesave">Decode gamesave</button>
-					<button py-click="encode_json">Encode Json</button>
+					<button id="decode" py-click="decode_gamesave">Decode gamesave</button>
+					<button id="encode" py-click="encode_json">Encode Json</button>
 					<button onclick="
 						{navigator.clipboard.writeText(document.querySelector('#output').value).then(
 							function () {alert('Copied to clipboard !')}
