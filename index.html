@@ -5,8 +5,6 @@
 		<meta charset="UTF-8">
 		<!-- This script tag bootstraps PyScript -->
 		<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
-
-		<!-- for splashscreen -->
 		<style>
 			#loading { outline: none; border: none; background: transparent }
 			html, body, .full_height { height : 100%; }
@@ -14,6 +12,7 @@
 			h1 { text-align : center; }
 			.file { display:none }
 		</style>
+		<!-- for splashscreen -->
 		<script type="module">
 			const loading = document.getElementById('loading');
 			addEventListener('py:ready', () => loading.close());
