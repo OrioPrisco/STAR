@@ -1,4 +1,4 @@
-name = "PyScript Jokes"
+name = "STAR web"
 packages = []
 [files]
 "./gamesave.py" = "./gamesave.py"
