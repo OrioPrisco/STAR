@@ -63,6 +63,28 @@
 			window.onload = () => {
 				document.getElementById("upload").addEventListener("change", on_upload);
 			}
+			function set_download_type(extension) {
+				const anchor = document.getElementById("hack-anchor");
+				const dl_button = document.getElementById("download");
+				dl_button.textContent = "Download " + extension;
+				anchor.download = "gamesave." + extension;
+			}
+			function on_download() {
+				const anchor = document.getElementById("hack-anchor");
+				const text = document.getElementById("output").value
+				if (anchor.download == "gamesave") {
+					if (text.startsWith('c'))
+						set_download_type("d13")
+					else if (text.startsWith("{"))
+						set_download_type("json")
+					else
+						console.log("Not quite sure what you are doing but go on");
+				}
+				console.log(text)
+				var blob = new Blob([text]);
+				anchor.href = URL.createObjectURL(blob);
+				anchor.click();
+			}
 		</script>
 	</head>
 	<body>
@@ -87,6 +109,10 @@
 				</div>
 				<textarea id="output"></textarea>
 				<script type="py" src="./main.py" config="./pyscript.toml"></script>
+				<div>
+					<button id="download" onclick="on_download()">Download</button>
+					<a download="gamesave" class="hidden" id="hack-anchor"></a>
+				</div>
 			</section>
 		</div>
 	</body>

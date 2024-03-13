@@ -2,7 +2,7 @@ from pyweb import pydom
 import gamesave
 import json
 from pyscript import window, document
-from js import highlight_elem
+from js import highlight_elem, set_download_type
 
 def clean_output_and_errors():
 	pydom["#output"][0].value = ""
@@ -20,6 +20,7 @@ def decode_gamesave(event):
 	textarea.value = json.dumps(decoded, indent=4)
 	textarea.scrollTop = 0
 	highlight_elem(textarea)
+	set_download_type("json")
 
 def encode_json(event):
 	clean_output_and_errors()
@@ -30,3 +31,4 @@ def encode_json(event):
 	textarea.value = encoded
 	textarea.scrollTop = 0
 	highlight_elem(textarea)
+	set_download_type("d13")
