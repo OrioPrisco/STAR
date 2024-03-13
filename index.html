@@ -15,7 +15,7 @@
 			html, body, .full_height { height : 100%; }
 			textarea { width : 100%; flex-grow : 1; }
 			h1 { text-align : center; }
-			.file { display:none }
+			.hidden { display:none }
 			@keyframes highlight {
 				0% {border-color: var(--default-color);}
 				10% {border-color: var(--highlight-color);}
@@ -82,7 +82,7 @@
 						)}">
 						Copy to clipboard
 					</button>
-					<input class="file" type="file" id="upload" accept=".json, .d13"></input>
+					<input class="hidden" type="file" id="upload" accept=".json, .d13"></input>
 					<button onclick="document.getElementById('upload').click()">Upload</button>
 				</div>
 				<textarea id="output"></textarea>
