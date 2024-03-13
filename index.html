@@ -98,18 +98,18 @@
 				<div>
 					<button id="decode" py-click="decode_gamesave">Decode gamesave</button>
 					<button id="encode" py-click="encode_json">Encode Json</button>
-					<button onclick="
-						{navigator.clipboard.writeText(document.querySelector('#output').value).then(
-							function () {alert('Copied to clipboard !')}
-						)}">
-						Copy to clipboard
-					</button>
 					<input class="hidden" type="file" id="upload" accept=".json, .d13"></input>
 					<button onclick="document.getElementById('upload').click()">Upload</button>
 				</div>
 				<textarea id="output"></textarea>
 				<script type="py" src="./main.py" config="./pyscript.toml"></script>
 				<div>
+					<button onclick="
+						{navigator.clipboard.writeText(document.querySelector('#output').value).then(
+							function () {alert('Copied to clipboard !')}
+						)}">
+						Copy to clipboard
+					</button>
 					<button id="download" onclick="on_download()">Download</button>
 					<a download="gamesave" class="hidden" id="hack-anchor"></a>
 				</div>
