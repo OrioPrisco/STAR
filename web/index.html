@@ -51,6 +51,9 @@
 			}
 			function noop(foo) {}
 			function add_error(content) {
+				content = content.replace("&", "&amp")
+				.replace(">", "&gt")
+				.replace("<", "&lt")
 				div = document.createElement("pre")
 				div.innerHTML = content;
 				div.classList.add("error")
