@@ -4,12 +4,6 @@ import traceback
 import sys
 from js import console
 
-def clean_errors():
-	nodes = document.querySelectorAll(".py-error")
-	if nodes:
-		for node in nodes:
-			node.remove()
-
 #console.log is used instead of print to not have the message displayed as several entries
 
 def decode_gamesave(string, suppress_errors):
