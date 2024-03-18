@@ -1,34 +1,43 @@
-from pyweb import pydom
 import gamesave
 import json
-from pyscript import window, document
-from js import highlight_elem, set_download_type
+import traceback
+import sys
+from js import console
 
-def clean_output_and_errors():
-	pydom["#output"][0].value = ""
+def clean_errors():
 	nodes = document.querySelectorAll(".py-error")
 	if nodes:
 		for node in nodes:
 			node.remove()
 
-def decode_gamesave(event):
-	clean_output_and_errors()
-	schema = json.load(open("./gamesave-schema.json", "r"))
-	gamesave_lines = pydom["#input"][0].value
-	decoded = gamesave.decode_file(gamesave_lines, schema, False)
-	textarea = document.getElementById("output")
-	textarea.value = json.dumps(decoded, indent=4)
-	textarea.scrollTop = 0
-	highlight_elem(textarea)
-	set_download_type("json")
+#console.log is used instead of print to not have the message displayed as several entries
 
-def encode_json(event):
-	clean_output_and_errors()
+def decode_gamesave(string, suppress_errors):
 	schema = json.load(open("./gamesave-schema.json", "r"))
-	json_lines = pydom["#input"][0].value
-	encoded = gamesave.encode_file(json_lines, schema, False)
-	textarea = document.getElementById("output")
-	textarea.value = encoded
-	textarea.scrollTop = 0
-	highlight_elem(textarea)
-	set_download_type("d13")
+	try:
+		decoded = gamesave.decode_file(string, schema, False, suppress_errors)
+		pretty = json.dumps(decoded, indent=4)
+		return pretty
+	except Exception as e:
+		if suppress_errors:
+			console.log("".join(traceback.format_exception(e)))
+			return None
+		raise e
+
+def encode_json(string, suppress_errors):
+	schema = json.load(open("./gamesave-schema.json", "r"))
+	try:
+		encoded = gamesave.encode_file(string, schema, False, suppress_errors)
+		return encoded
+	except Exception as e:
+		if suppress_errors:
+			console.log("".join(traceback.format_exception(e)))
+			return None
+		raise e
+
+#export functions to js
+
+import js
+
+js.encode_json = encode_json
+js.decode_gamesave = decode_gamesave
