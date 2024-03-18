@@ -32,55 +32,55 @@
 			addEventListener('py:ready', () => loading.close());
 			loading.showModal();
 		</script>
-		<!-- upload button -->
 		<script>
+			function clear_errors() {
+				for (const node of document.querySelectorAll(".py-error"))
+					node.remove()
+			}
 			function highlight_elem(elem) {
 				elem.classList.remove('highlight');
 				void elem.offsetWidth;
 				elem.classList.add('highlight');
 			}
 			function on_upload() {
-				document.getElementById("input").value = "loading...";
+				clear_errors();
+				document.getElementById("work-area").value = "loading...";
 				var reader = new FileReader();
 				reader.readAsText(this.files[0], "UTF-8");
 				reader.onload = (evt) => {
-					textarea = document.getElementById("input")
-					textarea.value = evt.target.result
-					textarea.scrollTop = 0
-					highlight_elem(textarea);
+					textarea = document.getElementById("work-area")
+					text = evt.target.result
 					if (this.files[0].name.endsWith(".json")) {
-						document.getElementById('encode').click();
+						textarea.value = text
+						//TODO use something better than alert
+						if (encode_json(text, true) == null)
+							alert("Warning : Invalid json, check the console for more details")
 					}
 					else if (this.files[0].name.endsWith(".d13")) {
-						document.getElementById('decode').click();
+						decoded = decode_gamesave(text, false)
+						textarea.value = decoded
 					}
 				};
 				reader.onerror = (evt) => {
-					console.log(evt);
-					document.getElementById("input").value = "Error check console for further info";
+					document.getElementById("work-area").value = "Error check console for further info";
 				};
 			}
 			window.onload = () => {
 				document.getElementById("upload").addEventListener("change", on_upload);
 			}
-			function set_download_type(extension) {
+			function on_download(extension) {
+				clear_errors();
 				const anchor = document.getElementById("hack-anchor");
-				const dl_button = document.getElementById("download");
-				dl_button.textContent = "Download " + extension;
-				anchor.download = "gamesave." + extension;
-			}
-			function on_download() {
-				const anchor = document.getElementById("hack-anchor");
-				const text = document.getElementById("output").value
-				if (anchor.download == "gamesave") {
-					if (text.startsWith('c'))
-						set_download_type("d13")
-					else if (text.startsWith("{"))
-						set_download_type("json")
-					else
-						console.log("Not quite sure what you are doing but go on");
+				text = document.getElementById("work-area").value
+				anchor.download = "gamsave." + extension;
+				if (extension == "json") {
+					//TODO use something better than alert
+					if (encode_json(text, true) == null)
+						alert("Warning : Invalid json, check the console for more details")
 				}
-				console.log(text)
+				else if (extension == "d13") {
+					text = decode_gamesave(text, false)
+				}
 				var blob = new Blob([text]);
 				anchor.href = URL.createObjectURL(blob);
 				anchor.click();
@@ -94,24 +94,22 @@
 		<h1>STAR: savefile tool for Star of Providence</h1>
 		<div style="height:85%; width:90%; margin: auto;">
 			<section class="pyscript full_height" style="display:flex; flex-flow:column; width:100%;">
-				<textarea id="input" ></textarea>
+				<textarea id="work-area" ></textarea>
 				<div>
-					<button id="decode" py-click="decode_gamesave">Decode gamesave</button>
-					<button id="encode" py-click="encode_json">Encode Json</button>
 					<input class="hidden" type="file" id="upload" accept=".json, .d13"></input>
 					<button onclick="document.getElementById('upload').click()">Upload</button>
-				</div>
-				<textarea id="output"></textarea>
-				<script type="py" src="./main.py" config="./pyscript.toml"></script>
-				<div>
 					<button onclick="
 						{navigator.clipboard.writeText(document.querySelector('#output').value).then(
 							function () {alert('Copied to clipboard !')}
 						)}">
 						Copy to clipboard
 					</button>
-					<button id="download" onclick="on_download()">Download</button>
+					<button id="download_d13" onclick="on_download('d13')">Download as .d13</button>
+					<button id="download_json" onclick="on_download('json')">Download as json</button>
 					<a download="gamesave" class="hidden" id="hack-anchor"></a>
+				</div>
+				<script type="py" src="./main.py" config="./pyscript.toml"></script>
+				<div>
 				</div>
 			</section>
 		</div>
