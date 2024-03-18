@@ -169,6 +169,9 @@ def decode_file(b64lines, schema, verbose, display_error=print_error, cli=True):
 		else:
 			display_error(f"Couldn't decode the base64 (.d13) file. Corrupted file ?")
 		raise e
+	except ValueError as e:
+		display_error("Non ascii character in the base64 (.d13) file")
+		raise e
 	output = {}
 	try:
 		lines = lines.decode("utf8").splitlines()
