@@ -157,17 +157,19 @@ line_handlers = {
 	"bitfield" : [decode_bitfield_wrapper, encode_bitfield_wrapper],
 }
 
-def decode_file(b64lines, schema, verbose):
+def decode_file(b64lines, schema, verbose, suppress_errors=False):
 	try:
 		lines = base64.b64decode(b64lines)
 	except binascii.Error as e:
-		print(f"Couldn't decode the base64 file. Corrupted file or did you mean to encode ?", file=sys.stderr)
+		if not suppress_errors:
+			print(f"Couldn't decode the base64 file. Corrupted file or did you mean to encode ?", file=sys.stderr)
 		raise e
 	output = {}
 	try:
 		lines = lines.decode("utf8").splitlines()
 	except UnicodeDecodeError as e:
-		print(f"Couldn't decode the base64 file as utf8. Corrupted file ?", file=sys.stderr)
+		if not suppress_errors:
+			print(f"Couldn't decode the base64 file as utf8. Corrupted file ?", file=sys.stderr)
 		raise e
 	for key in schema:
 		item = lines.pop(0)
@@ -176,15 +178,17 @@ def decode_file(b64lines, schema, verbose):
 		try:
 			output[key] = line_handlers[schema[key]["type"]][0](item, verbose, **schema[key])
 		except Exception as e:
-			print(f"Error when decoding field {key}", file=sys.stderr)
+			if not suppress_errors:
+				print(f"Error when decoding field {key}", file=sys.stderr)
 			raise e
 	return output
 
-def encode_file(jsonlines, schema, verbose):
+def encode_file(jsonlines, schema, verbose, suppress_errors=False):
 	try:
 		input_dir = json.loads(jsonlines)
 	except json.decoder.JSONDecodeError as e:
-		print(f"Couldn't decode the json file. Bad json format or did you mean to decode ?", file=sys.stderr)
+		if not suppress_errors:
+			print(f"Couldn't decode the json file. Bad json format or did you mean to decode ?", file=sys.stderr)
 		raise e
 	output = []
 	for key in schema:
@@ -193,7 +197,8 @@ def encode_file(jsonlines, schema, verbose):
 		try:
 			output.append(line_handlers[schema[key]["type"]][1](input_dir[key], verbose, **schema[key]))
 		except Exception as e:
-			print(f"Error when encoding field {key}", file=sys.stderr)
+			if not suppress_errors:
+				print(f"Error when encoding field {key}", file=sys.stderr)
 			raise e
 	output = "\n".join(output)
 	output = base64.b64encode(output.encode("utf8"))
