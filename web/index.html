@@ -24,9 +24,10 @@
 			}
 			.highlight {
 				animation : highlight 3s;
-				scroll-behavior: smooth;
 			}
 			.error {
+				--default-color: red;
+				--highlight-color: orange;
 				border: 1px solid red;
 				background: rgb(255, 221, 221);
 				color: black;
@@ -54,13 +55,13 @@
 				div.innerHTML = content;
 				div.classList.add("error")
 				document.body.append(div)
-				div.classList.add(".highlight")
+				highlight_elem(div)
 			}
 			function highlight_elem(elem) {
 				elem.classList.remove('highlight');
 				void elem.offsetWidth;
 				elem.classList.add('highlight');
-				elem.scrollIntoView();
+				elem.scrollIntoView({ behavior: "smooth"});
 			}
 			function on_upload() {
 				clear_errors();
