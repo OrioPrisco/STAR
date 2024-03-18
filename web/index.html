@@ -49,7 +49,6 @@
 				for (const node of document.querySelectorAll(".error"))
 					node.remove()
 			}
-			function noop(foo) {}
 			function add_error(content) {
 				content = content.replace("&", "&amp")
 				.replace(">", "&gt")
@@ -78,7 +77,7 @@
 						textarea.value = text
 						//TODO use something better than alert
 						try {
-							encode_json(text, noop)
+							encode_json(text, console.error)
 						} catch (error) {
 							alert("Warning : Invalid json, check the console for more details")
 						}
@@ -106,13 +105,13 @@
 				if (extension == "json") {
 					//TODO use something better than alert
 					try {
-						encode_json(text, noop)
+						encode_json(text, console.error)
 					} catch (error) {
 						alert("Warning : Invalid json, check the console for more details")
 					}
 				}
 				else if (extension == "d13") {
-					text = decode_gamesave(text, add_error)
+					text = encode_json(text, add_error)
 				}
 				var blob = new Blob([text]);
 				anchor.href = URL.createObjectURL(blob);
