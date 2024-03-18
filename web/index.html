@@ -24,6 +24,17 @@
 			}
 			.highlight {
 				animation : highlight 3s;
+				scroll-behavior: smooth;
+			}
+			.error {
+				border: 1px solid red;
+				background: rgb(255, 221, 221);
+				color: black;
+				font-family: courier, monospace;
+				white-space: pre;
+				overflow-x: auto;
+				padding: 8px;
+				margin-top: 8px;
 			}
 		</style>
 		<!-- for splashscreen -->
@@ -34,13 +45,22 @@
 		</script>
 		<script>
 			function clear_errors() {
-				for (const node of document.querySelectorAll(".py-error"))
+				for (const node of document.querySelectorAll(".error"))
 					node.remove()
+			}
+			function noop(foo) {}
+			function add_error(content) {
+				div = document.createElement("pre")
+				div.innerHTML = content;
+				div.classList.add("error")
+				document.body.append(div)
+				div.classList.add(".highlight")
 			}
 			function highlight_elem(elem) {
 				elem.classList.remove('highlight');
 				void elem.offsetWidth;
 				elem.classList.add('highlight');
+				elem.scrollIntoView();
 			}
 			function on_upload() {
 				clear_errors();
@@ -53,15 +73,21 @@
 					if (this.files[0].name.endsWith(".json")) {
 						textarea.value = text
 						//TODO use something better than alert
-						if (encode_json(text, true) == null)
+						try {
+							encode_json(text, noop)
+						} catch (error) {
 							alert("Warning : Invalid json, check the console for more details")
+						}
 					}
 					else if (this.files[0].name.endsWith(".d13")) {
-						decoded = decode_gamesave(text, false)
+						decoded = decode_gamesave(text, add_error)
 						textarea.value = decoded
 					}
+					highlight_elem(textarea)
 				};
 				reader.onerror = (evt) => {
+					textarea = document.getElementById("work-area")
+					highlight_elem(textarea)
 					document.getElementById("work-area").value = "Error check console for further info";
 				};
 			}
@@ -75,11 +101,14 @@
 				anchor.download = "gamsave." + extension;
 				if (extension == "json") {
 					//TODO use something better than alert
-					if (encode_json(text, true) == null)
+					try {
+						encode_json(text, noop)
+					} catch (error) {
 						alert("Warning : Invalid json, check the console for more details")
+					}
 				}
 				else if (extension == "d13") {
-					text = decode_gamesave(text, false)
+					text = decode_gamesave(text, add_error)
 				}
 				var blob = new Blob([text]);
 				anchor.href = URL.createObjectURL(blob);

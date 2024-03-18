@@ -157,19 +157,23 @@ line_handlers = {
 	"bitfield" : [decode_bitfield_wrapper, encode_bitfield_wrapper],
 }
 
-def decode_file(b64lines, schema, verbose, suppress_errors=False):
+def print_error(string):
+	print(string, file=sys.stderr)
+
+def decode_file(b64lines, schema, verbose, display_error=print_error, cli=True):
 	try:
 		lines = base64.b64decode(b64lines)
 	except binascii.Error as e:
-		if not suppress_errors:
-			print(f"Couldn't decode the base64 file. Corrupted file or did you mean to encode ?", file=sys.stderr)
+		if (cli):
+			display_error(f"Couldn't decode the base64 file. Corrupted file or did you mean to encode ?")
+		else:
+			display_error(f"Couldn't decode the base64 file. Corrupted file or did you mean to encode ?")
 		raise e
 	output = {}
 	try:
 		lines = lines.decode("utf8").splitlines()
 	except UnicodeDecodeError as e:
-		if not suppress_errors:
-			print(f"Couldn't decode the base64 file as utf8. Corrupted file ?", file=sys.stderr)
+		display_error(f"Couldn't decode the base64 file as utf8. Corrupted file ?")
 		raise e
 	for key in schema:
 		item = lines.pop(0)
@@ -178,17 +182,18 @@ def decode_file(b64lines, schema, verbose, suppress_errors=False):
 		try:
 			output[key] = line_handlers[schema[key]["type"]][0](item, verbose, **schema[key])
 		except Exception as e:
-			if not suppress_errors:
-				print(f"Error when decoding field {key}", file=sys.stderr)
+			display_error(f"Error when decoding field {key}")
 			raise e
 	return output
 
-def encode_file(jsonlines, schema, verbose, suppress_errors=False):
+def encode_file(jsonlines, schema, verbose, display_error=print_error, cli=True):
 	try:
 		input_dir = json.loads(jsonlines)
 	except json.decoder.JSONDecodeError as e:
-		if not suppress_errors:
-			print(f"Couldn't decode the json file. Bad json format or did you mean to decode ?", file=sys.stderr)
+		if (cli):
+			display_error(f"Couldn't decode the json file. Bad json format or did you mean to decode ?")
+		else:
+			display_error(f"Couldn't decode the json file. Bad json format ?")
 		raise e
 	output = []
 	for key in schema:
@@ -197,8 +202,7 @@ def encode_file(jsonlines, schema, verbose, suppress_errors=False):
 		try:
 			output.append(line_handlers[schema[key]["type"]][1](input_dir[key], verbose, **schema[key]))
 		except Exception as e:
-			if not suppress_errors:
-				print(f"Error when encoding field {key}", file=sys.stderr)
+			display_error(f"Error when encoding field {key}")
 			raise e
 	output = "\n".join(output)
 	output = base64.b64encode(output.encode("utf8"))

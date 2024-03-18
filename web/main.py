@@ -1,32 +1,24 @@
 import gamesave
 import json
 import traceback
-import sys
-from js import console
 
-#console.log is used instead of print to not have the message displayed as several entries
-
-def decode_gamesave(string, suppress_errors):
+def decode_gamesave(string, display_error):
 	schema = json.load(open("./gamesave-schema.json", "r"))
 	try:
-		decoded = gamesave.decode_file(string, schema, False, suppress_errors)
+		decoded = gamesave.decode_file(string, schema, False, display_error, False)
 		pretty = json.dumps(decoded, indent=4)
 		return pretty
 	except Exception as e:
-		if suppress_errors:
-			console.log("".join(traceback.format_exception(e)))
-			return None
+		display_error("".join(traceback.format_exception(e)))
 		raise e
 
-def encode_json(string, suppress_errors):
+def encode_json(string, display_error):
 	schema = json.load(open("./gamesave-schema.json", "r"))
 	try:
-		encoded = gamesave.encode_file(string, schema, False, suppress_errors)
+		encoded = gamesave.encode_file(string, schema, False, display_error, False)
 		return encoded
 	except Exception as e:
-		if suppress_errors:
-			console.log("".join(traceback.format_exception(e)))
-			return None
+		display_error("".join(traceback.format_exception(e)))
 		raise e
 
 #export functions to js
