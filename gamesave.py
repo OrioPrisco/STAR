@@ -165,9 +165,9 @@ def decode_file(b64lines, schema, verbose, display_error=print_error, cli=True):
 		lines = base64.b64decode(b64lines)
 	except binascii.Error as e:
 		if (cli):
-			display_error(f"Couldn't decode the base64 file. Corrupted file or did you mean to encode ?")
+			display_error(f"Couldn't decode the base64 (.d13) file. Corrupted file or did you mean to encode ?")
 		else:
-			display_error(f"Couldn't decode the base64 file. Corrupted file or did you mean to encode ?")
+			display_error(f"Couldn't decode the base64 (.d13) file. Corrupted file ?")
 		raise e
 	output = {}
 	try:
