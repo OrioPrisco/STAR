@@ -131,7 +131,7 @@
 					<input class="hidden" type="file" id="upload" accept=".json, .d13"></input>
 					<button onclick="document.getElementById('upload').click()">Upload</button>
 					<button onclick="
-						{navigator.clipboard.writeText(document.querySelector('#output').value).then(
+						{navigator.clipboard.writeText(document.querySelector('#work-area').value).then(
 							function () {alert('Copied to clipboard !')}
 						)}">
 						Copy to clipboard
