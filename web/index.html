@@ -44,7 +44,6 @@
 				margin-top: 8px;
 			}
 		</style>
-		<!-- for splashscreen -->
 		<script type="module">
 			const loading = document.getElementById('loading');
 			addEventListener('py:ready', () => loading.close());
@@ -80,6 +79,20 @@
 				elem.classList.add('highlight');
 				elem.scrollIntoView({ behavior: "smooth"});
 			}
+			function check_json() {
+				document.getElementById("warnings").replaceChildren();
+				text = document.getElementById("work-area").value;
+				if (!text)
+					return ;
+				try {
+					encode_json(text, console.error);
+					clear_notifications();
+				} catch (error) {
+					add_warning("Warning : Invalid json, check the console for more details");
+					return ;
+				}
+			}
+			addEventListener('py:all-done', check_json);
 			function on_upload() {
 				clear_notifications();
 				document.getElementById("work-area").value = "loading...";
@@ -88,15 +101,7 @@
 				reader.onload = (evt) => {
 					textarea = document.getElementById("work-area")
 					text = evt.target.result
-					if (this.files[0].name.endsWith(".json")) {
-						textarea.value = text
-						try {
-							encode_json(text, console.error)
-						} catch (error) {
-							add_warning("Warning : Invalid json, check the console for more details")
-						}
-					}
-					else if (this.files[0].name.endsWith(".d13")) {
+					if (this.files[0].name.endsWith(".d13")) {
 						decoded = decode_gamesave(text, add_error)
 						textarea.value = decoded
 					}
@@ -110,20 +115,14 @@
 			}
 			window.onload = () => {
 				document.getElementById("upload").addEventListener("change", on_upload);
+				document.getElementById("work-area").addEventListener("input", check_json);
 			}
 			function on_download(extension) {
 				clear_notifications();
 				const anchor = document.getElementById("hack-anchor");
 				text = document.getElementById("work-area").value
 				anchor.download = "gamesave." + extension;
-				if (extension == "json") {
-					try {
-						encode_json(text, console.error)
-					} catch (error) {
-						add_warning("Warning : Invalid json, check the console for more details")
-					}
-				}
-				else if (extension == "d13") {
+				if (extension == "d13") {
 					text = encode_json(text, add_error)
 				}
 				var blob = new Blob([text]);
