@@ -90,11 +90,10 @@
 					text = evt.target.result
 					if (this.files[0].name.endsWith(".json")) {
 						textarea.value = text
-						//TODO use something better than alert
 						try {
 							encode_json(text, console.error)
 						} catch (error) {
-							alert("Warning : Invalid json, check the console for more details")
+							add_warning("Warning : Invalid json, check the console for more details")
 						}
 					}
 					else if (this.files[0].name.endsWith(".d13")) {
@@ -118,11 +117,10 @@
 				text = document.getElementById("work-area").value
 				anchor.download = "gamsave." + extension;
 				if (extension == "json") {
-					//TODO use something better than alert
 					try {
 						encode_json(text, console.error)
 					} catch (error) {
-						alert("Warning : Invalid json, check the console for more details")
+						add_warning("Warning : Invalid json, check the console for more details")
 					}
 				}
 				else if (extension == "d13") {
