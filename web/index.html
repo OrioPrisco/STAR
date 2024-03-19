@@ -101,9 +101,12 @@
 				reader.onload = (evt) => {
 					textarea = document.getElementById("work-area")
 					text = evt.target.result
-					if (this.files[0].name.endsWith(".d13")) {
+					const filename = this.files[0].name;
+					if (filename.endsWith(".d13")) {
 						decoded = decode_gamesave(text, add_error)
 						textarea.value = decoded
+					} else if (!filename.endsWith(".json")) {
+						add_error("Cannot load file " + filename + "\nUnrecognized file extension");
 					}
 					highlight_elem(textarea)
 				};
