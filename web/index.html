@@ -51,11 +51,11 @@
 				content = content.replace("&", "&amp")
 				.replace(">", "&gt")
 				.replace("<", "&lt")
-				div = document.createElement("pre")
-				div.innerHTML = content;
-				div.classList.add("error")
-				document.body.append(div)
-				highlight_elem(div)
+				pre = document.createElement("pre")
+				pre.innerHTML = content;
+				pre.classList.add("error")
+				document.body.append(pre)
+				highlight_elem(pre)
 			}
 			function highlight_elem(elem) {
 				elem.classList.remove('highlight');
