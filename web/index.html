@@ -35,6 +35,14 @@
 				padding: 8px;
 				margin-top: 8px;
 			}
+			.warning {
+				border: 1px solid orange;
+				background: #fff27d;
+				font-family: courier, monospace;
+				overflow-x: auto;
+				padding: 8px;
+				margin-top: 8px;
+			}
 		</style>
 		<!-- for splashscreen -->
 		<script type="module">
@@ -43,9 +51,9 @@
 			loading.showModal();
 		</script>
 		<script>
-			function clear_errors() {
-				for (const node of document.querySelectorAll(".error"))
-					node.remove()
+			function clear_notifications() {
+				document.getElementById("errors").replaceChildren();
+				document.getElementById("warnings").replaceChildren();
 			}
 			function add_error(content) {
 				content = content.replace("&", "&amp")
@@ -54,8 +62,17 @@
 				pre = document.createElement("pre")
 				pre.innerHTML = content;
 				pre.classList.add("error")
-				document.body.append(pre)
+				document.getElementById("errors").append(pre)
 				highlight_elem(pre)
+			}
+			function add_warning(content) {
+				content = content.replace("&", "&amp")
+				.replace(">", "&gt")
+				.replace("<", "&lt")
+				pre = document.createElement("pre")
+				pre.innerHTML = content;
+				pre.classList.add("warning")
+				document.getElementById("warnings").append(pre)
 			}
 			function highlight_elem(elem) {
 				elem.classList.remove('highlight');
@@ -64,7 +81,7 @@
 				elem.scrollIntoView({ behavior: "smooth"});
 			}
 			function on_upload() {
-				clear_errors();
+				clear_notifications();
 				document.getElementById("work-area").value = "loading...";
 				var reader = new FileReader();
 				reader.readAsText(this.files[0], "UTF-8");
@@ -96,7 +113,7 @@
 				document.getElementById("upload").addEventListener("change", on_upload);
 			}
 			function on_download(extension) {
-				clear_errors();
+				clear_notifications();
 				const anchor = document.getElementById("hack-anchor");
 				text = document.getElementById("work-area").value
 				anchor.download = "gamsave." + extension;
@@ -143,6 +160,8 @@
 				</div>
 			</section>
 		</div>
+		<div id="warnings"></div>
+		<div id="errors"></div>
 	</body>
 </html>
 
