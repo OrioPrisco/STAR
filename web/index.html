@@ -135,7 +135,9 @@
 						textarea.value = text
 					}
 					else if (filename.endsWith(".d13")) {
-						decoded = decode_gamesave(text, add_error)
+						try {
+							decoded = decode_gamesave(text, add_error)
+						} catch (error) { return; }
 						textarea.value = decoded
 					} else {
 						add_error("Cannot load file " + filename + "\nUnrecognized file extension");
@@ -160,7 +162,9 @@
 				text = document.getElementById("work-area").value
 				anchor.download = "gamesave." + extension;
 				if (extension == "d13") {
-					text = encode_json(text, add_error)
+					try {
+						text = encode_json(text, add_error)
+					} catch (error) { return; }
 				}
 				var blob = new Blob([text]);
 				anchor.href = URL.createObjectURL(blob);
