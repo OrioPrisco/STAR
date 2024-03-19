@@ -15,7 +15,10 @@
 				width : 100%;
 				flex-grow : 1;
 			}
-			html, body, .full_height { height : 100%; }
+			body {
+				display:flex;
+				flex-flow:column;
+			}
 			h1 { text-align : center; }
 			.hidden { display:none }
 			@keyframes highlight {
@@ -178,7 +181,7 @@
 			<h1>Loading...</h1>
 		</dialog>
 		<h1>STAR: savefile tool for Star of Providence</h1>
-		<div style="height:85%; width:90%; margin: auto; display:flex; flex-flow:column" class="pyscript full_height">
+		<div style="height:85%; width:90%; margin: auto; display:flex; flex-flow:column; flex-grow: 1;" class="pyscript">
 			<p id="editorWrapper">
 				<textarea id="lineCounter" readonly></textarea>
 				<textarea id="work-area" ></textarea>
