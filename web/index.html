@@ -6,6 +6,7 @@
 		<title>Yep, That's a website</title>
 		<!-- This script tag bootstraps PyScript -->
 		<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
+		<!-- my css -->
 		<style>
 			#work-area {
 				--default-color: black;
@@ -14,7 +15,6 @@
 				width : 100%;
 				flex-grow : 1;
 			}
-			#loading { outline: none; border: none; background: transparent }
 			html, body, .full_height { height : 100%; }
 			h1 { text-align : center; }
 			.hidden { display:none }
@@ -46,11 +46,38 @@
 				margin-top: 8px;
 			}
 		</style>
+		<!-- based on https://gist.github.com/incubated-geek-cc/145ef838d5d5133e9414a0086603849f -->
+		<style>
+			#work-area, #lineCounter {
+				height: 75vh;
+				box-sizing: border-box;
+				resize: none;
+				outline: none;
+			}
+			#work-area {
+				width:100%;
+				/* Determine appearance of code editor */
+			}
+			#lineCounter {
+				overflow-y: hidden;
+				text-align: right;
+				width: 3.5rem;
+			}
+			#editorWrapper {
+				display: flex;
+				flex-flow: row;
+			}
+		</style>
+		<!-- Splash screen-->
 		<script type="module">
 			const loading = document.getElementById('loading');
 			addEventListener('py:all-done', () => loading.close());
 			loading.showModal();
 		</script>
+		<style>
+			#loading { outline: none; border: none; background: transparent }
+		</style>
+		<!-- my code -->
 		<script>
 			function clear_notifications() {
 				document.getElementById("errors").replaceChildren();
@@ -114,6 +141,7 @@
 						add_error("Cannot load file " + filename + "\nUnrecognized file extension");
 					}
 					highlight_elem(textarea)
+					line_counter();
 				};
 				reader.onerror = (evt) => {
 					textarea = document.getElementById("work-area")
@@ -146,7 +174,10 @@
 		</dialog>
 		<h1>STAR: savefile tool for Star of Providence</h1>
 		<div style="height:85%; width:90%; margin: auto; display:flex; flex-flow:column" class="pyscript full_height">
-			<textarea id="work-area" ></textarea>
+			<p id="editorWrapper">
+				<textarea id="lineCounter" readonly></textarea>
+				<textarea id="work-area" ></textarea>
+			</p>
 			<div>
 				<input class="hidden" type="file" id="upload" accept=".json, .d13">
 				<button onclick="document.getElementById('upload').click()">Upload</button>
@@ -164,6 +195,45 @@
 		</div>
 		<div id="warnings"></div>
 		<div id="errors"></div>
+		<!-- based on https://gist.github.com/incubated-geek-cc/145ef838d5d5133e9414a0086603849f -->
+		<script>
+			var codeEditor = document.getElementById('work-area');
+			var lineCounter = document.getElementById('lineCounter');
+
+			var lineCountCache = 0;
+			function line_counter() {
+				var lineCount = codeEditor.value.split('\n').length;
+				var outarr = new Array();
+				if (lineCountCache != lineCount) {
+					for (var x = 0; x < lineCount; x++) {
+						outarr[x] = (x + 1) + '.';
+					}
+					lineCounter.value = outarr.join('\n');
+				}
+				lineCountCache = lineCount;
+			}
+
+			codeEditor.addEventListener('scroll', () => {
+				lineCounter.scrollTop = codeEditor.scrollTop;
+				lineCounter.scrollLeft = codeEditor.scrollLeft;
+			});
+
+			codeEditor.addEventListener('input', () => {
+				line_counter();
+			});
+
+			codeEditor.addEventListener('keydown', (e) => {
+				let { keyCode } = e;
+				let { value, selectionStart, selectionEnd } = codeEditor;
+				if (keyCode === 9) {  // TAB = 9
+					e.preventDefault();
+					codeEditor.value = value.slice(0, selectionStart) + '\t' + value.slice(selectionEnd);
+					codeEditor.setSelectionRange(selectionStart+2, selectionStart+2)
+				}
+			});
+
+			line_counter();
+		</script>
 	</body>
 </html>
 
