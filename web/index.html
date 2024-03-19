@@ -1,8 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 	<head>
 		<!-- Recommended meta tags -->
 		<meta charset="UTF-8">
+		<title>Yep, That's a website</title>
 		<!-- This script tag bootstraps PyScript -->
 		<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 		<style>
@@ -141,26 +142,22 @@
 			<h1>Loading...</h1>
 		</dialog>
 		<h1>STAR: savefile tool for Star of Providence</h1>
-		<div style="height:85%; width:90%; margin: auto;">
-			<section class="pyscript full_height" style="display:flex; flex-flow:column; width:100%;">
-				<textarea id="work-area" ></textarea>
-				<div>
-					<input class="hidden" type="file" id="upload" accept=".json, .d13"></input>
-					<button onclick="document.getElementById('upload').click()">Upload</button>
-					<button onclick="
-						{navigator.clipboard.writeText(document.querySelector('#work-area').value).then(
-							function () {alert('Copied to clipboard !')}
-						)}">
-						Copy to clipboard
-					</button>
-					<button id="download_d13" onclick="on_download('d13')">Download as .d13</button>
-					<button id="download_json" onclick="on_download('json')">Download as json</button>
-					<a download="gamesave" class="hidden" id="hack-anchor"></a>
-				</div>
-				<script type="py" src="./main.py" config="./pyscript.toml"></script>
-				<div>
-				</div>
-			</section>
+		<div style="height:85%; width:90%; margin: auto; display:flex; flex-flow:column" class="pyscript full_height">
+			<textarea id="work-area" ></textarea>
+			<div>
+				<input class="hidden" type="file" id="upload" accept=".json, .d13">
+				<button onclick="document.getElementById('upload').click()">Upload</button>
+				<button onclick="
+					{navigator.clipboard.writeText(document.querySelector('#work-area').value).then(
+						function () {alert('Copied to clipboard !')}
+					)}">
+					Copy to clipboard
+				</button>
+				<button id="download_d13" onclick="on_download('d13')">Download as .d13</button>
+				<button id="download_json" onclick="on_download('json')">Download as json</button>
+				<a href="" download="gamesave" class="hidden" id="hack-anchor"></a>
+			</div>
+			<script type="py" src="./main.py" config="./pyscript.toml"></script>
 		</div>
 		<div id="warnings"></div>
 		<div id="errors"></div>
