@@ -12,7 +12,6 @@
 				--default-color: black;
 				--highlight-color: gold;
 				border-color : var(--default-color);
-				width : 100%;
 				flex-grow : 1;
 			}
 			body {
@@ -52,14 +51,9 @@
 		<!-- based on https://gist.github.com/incubated-geek-cc/145ef838d5d5133e9414a0086603849f -->
 		<style>
 			#work-area, #lineCounter {
-				height: 75vh;
 				box-sizing: border-box;
 				resize: none;
 				outline: none;
-			}
-			#work-area {
-				width:100%;
-				/* Determine appearance of code editor */
 			}
 			#lineCounter {
 				overflow-y: hidden;
@@ -69,6 +63,7 @@
 			#editorWrapper {
 				display: flex;
 				flex-flow: row;
+				flex: 1 1 auto;
 			}
 		</style>
 		<!-- Splash screen-->
@@ -181,7 +176,7 @@
 			<h1>Loading...</h1>
 		</dialog>
 		<h1>STAR: savefile tool for Star of Providence</h1>
-		<div style="height:85%; width:90%; margin: auto; display:flex; flex-flow:column; flex-grow: 1;" class="pyscript">
+		<div style="width:90%; margin: auto; display:flex; flex-flow:column; flex: 1 1 75vh;" class="pyscript">
 			<p id="editorWrapper">
 				<textarea id="lineCounter" readonly></textarea>
 				<textarea id="work-area" ></textarea>
