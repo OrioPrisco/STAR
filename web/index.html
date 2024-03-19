@@ -6,14 +6,15 @@
 		<!-- This script tag bootstraps PyScript -->
 		<script type="module" src="https://pyscript.net/releases/2024.1.1/core.js"></script>
 		<style>
-			textarea {
+			#work-area {
 				--default-color: black;
 				--highlight-color: gold;
 				border-color : var(--default-color);
+				width : 100%;
+				flex-grow : 1;
 			}
 			#loading { outline: none; border: none; background: transparent }
 			html, body, .full_height { height : 100%; }
-			textarea { width : 100%; flex-grow : 1; }
 			h1 { text-align : center; }
 			.hidden { display:none }
 			@keyframes highlight {
