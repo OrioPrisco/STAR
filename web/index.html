@@ -141,6 +141,7 @@
 						add_error("Cannot load file " + filename + "\nUnrecognized file extension");
 					}
 					highlight_elem(textarea)
+					textarea.scrollTop = 0;
 					line_counter();
 				};
 				reader.onerror = (evt) => {
@@ -228,7 +229,7 @@
 				if (keyCode === 9) {  // TAB = 9
 					e.preventDefault();
 					codeEditor.value = value.slice(0, selectionStart) + '\t' + value.slice(selectionEnd);
-					codeEditor.setSelectionRange(selectionStart+2, selectionStart+2)
+					codeEditor.setSelectionRange(selectionStart+2, selectionStart+1)
 				}
 			});
 
