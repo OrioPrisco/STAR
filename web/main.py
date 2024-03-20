@@ -9,7 +9,6 @@ def decode_gamesave(string, logger):
 		pretty = json.dumps(decoded, indent=4)
 		return pretty
 	except Exception as e:
-		logger.error(repr(e), "".join(traceback.format_exception(e)))
 		raise e
 
 def encode_json(string, logger):
@@ -18,7 +17,6 @@ def encode_json(string, logger):
 		encoded = gamesave.encode_file(string, schema, logger)
 		return encoded
 	except Exception as e:
-		logger.error(repr(e), "".join(traceback.format_exception(e)))
 		raise e
 
 #export functions to js

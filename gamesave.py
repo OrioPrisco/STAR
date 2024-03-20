@@ -9,6 +9,7 @@ import os
 import enums
 import base64
 import binascii
+import traceback
 
 
 enums = {
@@ -32,6 +33,9 @@ def get_kind(**kwargs):
 	if (kind_name == None):
 		return None
 	return enums[kind_name.lower()]
+
+def log_except(logger, title, exception):
+	logger.error(f"{title} [{repr(exception)}]", "".join(traceback.format_exception(exception)))
 
 def dbg_print(debug, message):
 	if (debug):
@@ -162,18 +166,18 @@ def decode_file(b64lines, schema, logger):
 		lines = base64.b64decode(b64lines)
 	except binascii.Error as e:
 		if (logger.interactive):
-			logger.error(f"Couldn't decode the base64 (.d13) file. Corrupted file or did you mean to encode ?", "")
+			log_except(logger, f"Couldn't decode the base64 (.d13) file. Corrupted file or did you mean to encode ?", e)
 		else:
-			logger.error(f"Couldn't decode the base64 (.d13) file. Corrupted file ?", "")
+			log_except(logger, f"Couldn't decode the base64 (.d13) file. Corrupted file ?", e)
 		raise e
 	except ValueError as e:
-		logger.error("Non ascii character in the base64 (.d13) file", "")
+		logger_except(logger, "Non ascii character in the base64 (.d13) file", e)
 		raise e
 	output = {}
 	try:
 		lines = lines.decode("utf8").splitlines()
 	except UnicodeDecodeError as e:
-		logger.error(f"Couldn't decode the base64 file as utf8. Corrupted file ?", "")
+		log_except(logger, f"Couldn't decode the base64 file as utf8. Corrupted file ?", e)
 		raise e
 	for key in schema:
 		item = lines.pop(0)
@@ -181,7 +185,7 @@ def decode_file(b64lines, schema, logger):
 		try:
 			output[key] = line_handlers[schema[key]["type"]][0](item, False, **schema[key])
 		except Exception as e:
-			logger.error(f"Error when decoding field {key}", "")
+			log_except(logger, f"Error when decoding field {key}", e)
 			raise e
 	return output
 
@@ -190,9 +194,9 @@ def encode_file(jsonlines, schema, logger):
 		input_dir = json.loads(jsonlines)
 	except json.decoder.JSONDecodeError as e:
 		if (logger.interactive):
-			logger.error(f"Couldn't decode the json file. Bad json format or did you mean to decode ?", "")
+			log_except(logger, f"Couldn't decode the json file. Bad json format or did you mean to decode ?", e)
 		else:
-			logger.error(f"Couldn't decode the json file. Bad json format ?", "")
+			log_except(logger, f"Couldn't decode the json file. Bad json format ?", e)
 		raise e
 	output = []
 	for key in schema:
@@ -200,7 +204,7 @@ def encode_file(jsonlines, schema, logger):
 		try:
 			output.append(line_handlers[schema[key]["type"]][1](input_dir[key], False, **schema[key]))
 		except Exception as e:
-			logger.error(f"Error when encoding field {key}")
+			log_except(logger, f"Error when encoding field {key}", e)
 			raise e
 	output = "\n".join(output)
 	output = base64.b64encode(output.encode("utf8"))
