@@ -136,6 +136,7 @@
 					const filename = this.files[0].name;
 					if (filename.endsWith(".json")) {
 						textarea.value = text
+						check_json();
 					}
 					else if (filename.endsWith(".d13")) {
 						try {
