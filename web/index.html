@@ -111,7 +111,6 @@
 				elem.classList.remove('highlight');
 				void elem.offsetWidth;
 				elem.classList.add('highlight');
-				elem.scrollIntoView({ behavior: "smooth"});
 			}
 			function check_json() {
 				clear_notifications();
@@ -141,10 +140,17 @@
 					else if (filename.endsWith(".d13")) {
 						try {
 							decoded = decode_gamesave(text, regular_logger)
-						} catch (error) { return; }
+						} catch (error) {
+							document.getElementById("errors").scrollIntoView({ behavior: "smooth"});
+							return;
+						}
 						textarea.value = decoded
 					} else {
 						add_error("Cannot load file " + filename, "Unrecognized file extension");
+						document.getElementById("errors").scrollIntoView({ behavior: "smooth"});
+						line_counter();
+						textarea.scrollTop = 0;
+						return ;
 					}
 					highlight_elem(textarea)
 					textarea.scrollTop = 0;
@@ -168,7 +174,10 @@
 				if (extension == "d13") {
 					try {
 						text = encode_json(text, regular_logger)
-					} catch (error) { return; }
+					} catch (error) {
+						document.getElementById("errors").scrollIntoView({ behavior: "smooth"});
+						return;
+					}
 				}
 				var blob = new Blob([text]);
 				anchor.href = URL.createObjectURL(blob);
