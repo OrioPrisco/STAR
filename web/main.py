@@ -2,23 +2,23 @@ import gamesave
 import json
 import traceback
 
-def decode_gamesave(string, display_error):
+def decode_gamesave(string, logger):
 	schema = json.load(open("./gamesave-schema.json", "r"))
 	try:
-		decoded = gamesave.decode_file(string, schema, False, display_error, False)
+		decoded = gamesave.decode_file(string, schema, logger)
 		pretty = json.dumps(decoded, indent=4)
 		return pretty
 	except Exception as e:
-		display_error("".join(traceback.format_exception(e)))
+		logger.error(repr(e), "".join(traceback.format_exception(e)))
 		raise e
 
-def encode_json(string, display_error):
+def encode_json(string, logger):
 	schema = json.load(open("./gamesave-schema.json", "r"))
 	try:
-		encoded = gamesave.encode_file(string, schema, False, display_error, False)
+		encoded = gamesave.encode_file(string, schema, logger)
 		return encoded
 	except Exception as e:
-		display_error("".join(traceback.format_exception(e)))
+		logger.error(repr(e), "".join(traceback.format_exception(e)))
 		raise e
 
 #export functions to js

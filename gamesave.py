@@ -157,60 +157,72 @@ line_handlers = {
 	"bitfield" : [decode_bitfield_wrapper, encode_bitfield_wrapper],
 }
 
-def print_error(string):
-	print(string, file=sys.stderr)
-
-def decode_file(b64lines, schema, verbose, display_error=print_error, cli=True):
+def decode_file(b64lines, schema, logger):
 	try:
 		lines = base64.b64decode(b64lines)
 	except binascii.Error as e:
-		if (cli):
-			display_error(f"Couldn't decode the base64 (.d13) file. Corrupted file or did you mean to encode ?")
+		if (logger.interactive):
+			logger.error(f"Couldn't decode the base64 (.d13) file. Corrupted file or did you mean to encode ?", "")
 		else:
-			display_error(f"Couldn't decode the base64 (.d13) file. Corrupted file ?")
+			logger.error(f"Couldn't decode the base64 (.d13) file. Corrupted file ?", "")
 		raise e
 	except ValueError as e:
-		display_error("Non ascii character in the base64 (.d13) file")
+		logger.error("Non ascii character in the base64 (.d13) file", "")
 		raise e
 	output = {}
 	try:
 		lines = lines.decode("utf8").splitlines()
 	except UnicodeDecodeError as e:
-		display_error(f"Couldn't decode the base64 file as utf8. Corrupted file ?")
+		logger.error(f"Couldn't decode the base64 file as utf8. Corrupted file ?", "")
 		raise e
 	for key in schema:
 		item = lines.pop(0)
-		if (verbose):
-			print(key, item, file=sys.stderr)
+		logger.debug(key, item)
 		try:
-			output[key] = line_handlers[schema[key]["type"]][0](item, verbose, **schema[key])
+			output[key] = line_handlers[schema[key]["type"]][0](item, False, **schema[key])
 		except Exception as e:
-			display_error(f"Error when decoding field {key}")
+			logger.error(f"Error when decoding field {key}", "")
 			raise e
 	return output
 
-def encode_file(jsonlines, schema, verbose, display_error=print_error, cli=True):
+def encode_file(jsonlines, schema, logger):
 	try:
 		input_dir = json.loads(jsonlines)
 	except json.decoder.JSONDecodeError as e:
-		if (cli):
-			display_error(f"Couldn't decode the json file. Bad json format or did you mean to decode ?")
+		if (logger.interactive):
+			logger.error(f"Couldn't decode the json file. Bad json format or did you mean to decode ?", "")
 		else:
-			display_error(f"Couldn't decode the json file. Bad json format ?")
+			logger.error(f"Couldn't decode the json file. Bad json format ?", "")
 		raise e
 	output = []
 	for key in schema:
-		if (verbose):
-			print(key, file=sys.stderr)
+		logger.debug(key)
 		try:
-			output.append(line_handlers[schema[key]["type"]][1](input_dir[key], verbose, **schema[key]))
+			output.append(line_handlers[schema[key]["type"]][1](input_dir[key], False, **schema[key]))
 		except Exception as e:
-			display_error(f"Error when encoding field {key}")
+			logger.error(f"Error when encoding field {key}")
 			raise e
 	output = "\n".join(output)
 	output = base64.b64encode(output.encode("utf8"))
 	return output.decode("utf8")
 
+def stderr_print_with_title(title, content):
+	print(title + "\n", file=sys.stderr)
+	print(content, file=sys.stderr)
+
+def noop(*args):
+	pass
+
+class Logger:
+	def __init__(self, verbose=False, interactive=True):
+		if verbose:
+			self.debug = stderr_print_with_title
+			self.warn = stderr_print_with_title
+		else:
+			self.debug = noop
+			self.warn = noop
+		self.error = stderr_print_with_title
+		self.interactive=True
 
 if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
@@ -221,11 +233,12 @@ if __name__ == "__main__":
 	args = parser.parse_args()
 	script_dir = os.path.abspath( os.path.dirname( __file__ ) )
 	schema = json.load(open(os.path.join(script_dir, "gamesave-schema.json"), "r"))
+	logger = Logger(args.verbose)
 	if args.decode:
 		b64lines = "".join(args.input.readlines())
-		output = decode_file(b64lines, schema, args.verbose)
+		output = decode_file(b64lines, schema, logger)
 		print(json.dumps(output, indent=4))
 	else:
 		jsonlines = "".join(args.input.readlines())
-		output = encode_file(jsonlines, schema, args.verbose)
+		output = encode_file(jsonlines, schema, logger)
 		print(output)

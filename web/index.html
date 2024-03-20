@@ -36,6 +36,7 @@
 				overflow-x: auto;
 				padding: 8px;
 				margin-top: 8px;
+				white-space: pre;
 			}
 			.warning {
 				border: 1px solid orange;
@@ -44,6 +45,7 @@
 				overflow-x: auto;
 				padding: 8px;
 				margin-top: 8px;
+				white-space: pre;
 			}
 		</style>
 		<!-- based on https://gist.github.com/incubated-geek-cc/145ef838d5d5133e9414a0086603849f -->
@@ -75,28 +77,35 @@
 		</style>
 		<!-- my code -->
 		<script>
+			regular_logger = {interactive:false, warn:add_warning, error:add_error, debug: () => {}}
 			function clear_notifications() {
 				document.getElementById("errors").replaceChildren();
 				document.getElementById("warnings").replaceChildren();
 			}
-			function add_error(content) {
-				content = content.replace("&", "&amp")
-				.replace(">", "&gt")
-				.replace("<", "&lt")
-				pre = document.createElement("pre")
-				pre.innerHTML = content;
-				pre.classList.add("error")
-				document.getElementById("errors").append(pre)
-				highlight_elem(pre)
+			function escape_chars(text) {
+				return text.replace("&", "&amp").replace(">", "&gt").replace("<", "&lt")
 			}
-			function add_warning(content) {
-				content = content.replace("&", "&amp")
-				.replace(">", "&gt")
-				.replace("<", "&lt")
-				pre = document.createElement("pre")
-				pre.innerHTML = content;
-				pre.classList.add("warning")
-				document.getElementById("warnings").append(pre)
+			function add_error(title, content) {
+				details = document.createElement("details")
+				summary = document.createElement("summary")
+				p = document.createElement("p")
+				summary.innerHTML = escape_chars(title)
+				p.innerHTML = escape_chars(content)
+				details.replaceChildren(summary, p)
+				details.classList.add("error")
+				document.getElementById("errors").append(details)
+				highlight_elem(details)
+			}
+			function add_warning(title, content) {
+				details = document.createElement("details")
+				summary = document.createElement("summary")
+				p = document.createElement("p")
+				summary.innerHTML = escape_chars(title)
+				p.innerHTML = escape_chars(content)
+				details.replaceChildren(summary, p)
+				details.classList.add("warning")
+				document.getElementById("warnings").append(details)
+				highlight_elem(details)
 			}
 			function highlight_elem(elem) {
 				elem.classList.remove('highlight');
@@ -110,10 +119,10 @@
 				if (!text)
 					return ;
 				try {
-					encode_json(text, console.error);
+					encode_json(text, regular_logger);
 					clear_notifications();
 				} catch (error) {
-					add_warning("Warning : Invalid json, check the console for more details");
+					add_warning("Warning : Invalid json", "Check the console for more details");
 					return ;
 				}
 			}
@@ -132,11 +141,11 @@
 					}
 					else if (filename.endsWith(".d13")) {
 						try {
-							decoded = decode_gamesave(text, add_error)
+							decoded = decode_gamesave(text, regular_logger)
 						} catch (error) { return; }
 						textarea.value = decoded
 					} else {
-						add_error("Cannot load file " + filename + "\nUnrecognized file extension");
+						add_error("Cannot load file " + filename, "Unrecognized file extension");
 					}
 					highlight_elem(textarea)
 					textarea.scrollTop = 0;
@@ -159,7 +168,7 @@
 				anchor.download = "gamesave." + extension;
 				if (extension == "d13") {
 					try {
-						text = encode_json(text, add_error)
+						text = encode_json(text, regular_logger)
 					} catch (error) { return; }
 				}
 				var blob = new Blob([text]);
