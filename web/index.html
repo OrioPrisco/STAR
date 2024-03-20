@@ -9,9 +9,7 @@
 		<!-- my css -->
 		<style>
 			#work-area {
-				--default-color: black;
 				--highlight-color: gold;
-				border-color : var(--default-color);
 				flex-grow : 1;
 				white-space: pre;
 			}
@@ -22,16 +20,15 @@
 			h1 { text-align : center; }
 			.hidden { display:none }
 			@keyframes highlight {
-				0% {border-color: var(--default-color);}
+				0% {}
 				10% {border-color: var(--highlight-color);}
 				20% {border-color: var(--highlight-color);}
-				100% {border-color: var(--default-color);}
+				100% {}
 			}
 			.highlight {
 				animation : highlight 3s;
 			}
 			.error {
-				--default-color: red;
 				--highlight-color: orange;
 				border: 1px solid red;
 				background: rgb(255, 221, 221);
