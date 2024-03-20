@@ -18,7 +18,7 @@
 "bombs" : {"type" : "2E01", "kind" : "Bomb"},
 "upgrades" : {"type" : "bitfield", "kind" : "Upgrade"},
 "available upgrades" : {"type" : "2E01", "kind" : "Upgrade"},
-"ugrades (visual)" : {"type" : "2E01", "kind" : "Upgrade"},
+"upgrades (visual)" : {"type" : "2E01", "kind" : "Upgrade"},
 "cartridges" : {"type" : "2E01", "kind" : "Cartridge"},
 "cartridge count" : {"type" : "int", "length of" : "cartridges"},
 "available cartridges" : {"type" : "2E01", "kind" : "Cartridge"},
