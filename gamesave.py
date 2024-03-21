@@ -222,12 +222,14 @@ def noop(*args):
 	pass
 
 class Logger:
-	def __init__(self, verbose=False, interactive=True):
+	def __init__(self, verbose=False, warnings=False, interactive=True):
 		if verbose:
 			self.debug = logger_print("Debug")
-			self.warn = logger_print("Warning")
 		else:
 			self.debug = noop
+		if verbose or warnings:
+			self.warn = logger_print("Warning")
+		else:
 			self.warn = noop
 		self.error = logger_print("Error")
 		self.interactive=True
@@ -236,12 +238,13 @@ if __name__ == "__main__":
 	parser = argparse.ArgumentParser()
 	parser.add_argument("-i", "--input", required=False, type=argparse.FileType('r'), default=sys.stdin)
 	parser.add_argument("-d", "--decode", required=False, action='store_true', default=False)
-	parser.add_argument("-v", "--verbose", required=False, action='store_true', default=False)
+	parser.add_argument("-v", "--verbose", required=False, action='store_true', default=False, help="Enables warnings and debug logs")
+	parser.add_argument("-w", "--warnings", required=False, action='store_true', default=False, help="Enables warnings")
 	#option for passing custom schema ?
 	args = parser.parse_args()
 	script_dir = os.path.abspath( os.path.dirname( __file__ ) )
 	schema = json.load(open(os.path.join(script_dir, "gamesave-schema.json"), "r"))
-	logger = Logger(args.verbose)
+	logger = Logger(args.verbose, args.warnings)
 	if args.decode:
 		b64lines = "".join(args.input.readlines())
 		output = decode_file(b64lines, schema, logger)

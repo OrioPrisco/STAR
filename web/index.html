@@ -119,8 +119,8 @@
 				if (!text)
 					return ;
 				try {
-					encode_json(text, regular_logger);
 					clear_notifications();
+					encode_json(text, regular_logger);
 				} catch (error) {
 					return ;
 				}
