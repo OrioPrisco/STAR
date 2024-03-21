@@ -104,7 +104,7 @@ def encode_int_wrapper(value, logger, **kwargs):
 def encode_bool_wrapper(value, logger, **kwargs):
 	field = kwargs["field"]
 	assert isinstance(value, (int, float)), f"number required but got {type(value).__name__}"
-	if (value != 1 or value != 0):
+	if (value != 1 and value != 0):
 		logger.warn(f"{field}: {value} is not a boolean value !", "It should be 1 or 0, Who knows what this will do")
 	return str(value)
 
