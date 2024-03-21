@@ -78,7 +78,10 @@ def	encode_2E01(json_array, logger, kind = None):
 		item_as_int = try_int_from_enum(item, kind)
 		if item_as_int == None:
 			err = True
-			logger.warn(f"couldn't convert {item} to an integer value", "")
+			if logger.interactive:
+				logger.warn(f"couldn't convert {item} to an integer value", "")
+			else:
+				logger.debug(f"couldn't convert {item} to an integer value", "")
 		else:
 			item = item_as_int
 		encoded_array.append(encode_data(item))

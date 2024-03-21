@@ -85,6 +85,22 @@ def	try_str_from_enum(value, kind=None):
 	except ValueError:
 		return None
 
+def decode_enum(value, logger, kind, field=""):
+	if field:
+		field += ": "
+	value_as_str = try_str_from_enum(value, kind)
+	if (value_as_str == None and kind):
+		message = f"{field}Couldn't convert {value} to a string using kind {kind.__name__ if kind else 'None'}"
+		if kind.__name__ == "Unique":
+			logger.debug(message, "Not all uniques are currently known, this is pretty normal")
+		else:
+			logger.warn(message, "If You did not modify your save and got this error, please report it")
+		return int(value)
+	if (value_as_str == None):
+		logger.debug(f"{field}Couldn't convert {value} to a string using no kind", "this is most likely normal")
+		return int(value)
+	return value_as_str
+
 def	decode_2E01(line, logger, kind = None):
 	index = 0
 	assert line[0:4] == "2E01", f"Incorrect header : {line[index:index+4]}, expected 2E01"
@@ -94,14 +110,9 @@ def	decode_2E01(line, logger, kind = None):
 	index += 6
 	logger.debug(f"decoding 2E01 {length} values", "")
 	index+=6 # padding
-	for i in range(length): #todo : refactor this into decode_enum and use it in gamesave
+	for i in range(length):
 		chars,value = decode_data(line, index)
-		value_as_str = try_str_from_enum(value, kind)
-		if value_as_str == None:
-			logger.warn(f"couldn't convert {value} to a string", "")
-		else:
-			value = value_as_str
-		entries.append(value)
+		entries.append(decode_enum(value, logger, kind))
 		index+= chars
 	logger.debug(f"decoded {index} characters, {len(line) - index} remaining", "")
 	return entries
