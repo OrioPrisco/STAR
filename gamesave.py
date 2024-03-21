@@ -210,9 +210,11 @@ def encode_file(jsonlines, schema, logger):
 	output = base64.b64encode(output.encode("utf8"))
 	return output.decode("utf8")
 
-def stderr_print_with_title(title, content):
-	print(title + "\n", file=sys.stderr)
-	print(content, file=sys.stderr)
+def logger_print(kind):
+	def stderr_print_with_title(title, content):
+		print(f"{kind} {title}\n", file=sys.stderr)
+		print(content, file=sys.stderr)
+	return stderr_print_with_title
 
 def noop(*args):
 	pass
@@ -220,12 +222,12 @@ def noop(*args):
 class Logger:
 	def __init__(self, verbose=False, interactive=True):
 		if verbose:
-			self.debug = stderr_print_with_title
-			self.warn = stderr_print_with_title
+			self.debug = logger_print("Debug: ")
+			self.warn = logger_print("Warning: ")
 		else:
 			self.debug = noop
 			self.warn = noop
-		self.error = stderr_print_with_title
+		self.error = logger_print("Error: ")
 		self.interactive=True
 
 if __name__ == "__main__":
