@@ -37,114 +37,117 @@ def get_kind(**kwargs):
 def log_except(logger, title, exception):
 	logger.error(f"{title} [{repr(exception)}]", "".join(traceback.format_exception(exception)))
 
-def dbg_print(debug, message):
-	if (debug):
-		print(message, file=sys.stderr)
-
-def decode_int_wrapper(value, debug, **kwargs):
+def decode_int_wrapper(value, logger, **kwargs):
 	# TODO : handle length of
 	return int(value)
 
-def decode_bool_wrapper(value, debug, **kwargs):
+def decode_bool_wrapper(value, logger, **kwargs):
 	value = int(value)
-	if (debug and (value != 1 and value != 0)):
-		dbg_print(debug, f"Warning, {value} is not a boolean value !")
+	if (value != 1 and value != 0):
+		logger.warn(f"{value} is not a boolean value !", "If You did not modify your save and got this error, please report it")
 	return value
 
 
-def decode_enum_wrapper(value, debug, **kwargs):
+def decode_enum_wrapper(value, logger, **kwargs):
 	kind = get_kind(**kwargs)
 	value_as_str = dc.try_str_from_enum(int(value), kind)
+	if (value_as_str == None and kind):
+		message = f"Couldn't convert {value} to a string using kind {kind.__name__ if kind else 'None'}"
+		if kind == enums["unique"]:
+			logger.debug(message, "Not all uniques are currently known, this is pretty normal")
+		else:
+			logger.warn(message, "If You did not modify your save and got this error, please report it")
+		return int(value)
 	if (value_as_str == None):
-		dbg_print(debug, f"Warning, couldn't convert {value} to a string using kind {kind.__name__ if kind else 'None'}")
+		logger.debug(f"Couldn't convert {value} to a string using no kind", "this is most likely normal")
 		return int(value)
 	return value_as_str
 
-def decode_float_wrapper(value, debug, **kwargs):
+def decode_float_wrapper(value, logger, **kwargs):
 	return float(value)
 
-def decode_string_wrapper(value, debug, **kwargs):
+def decode_string_wrapper(value, logger, **kwargs):
 	return value
 
-def decode_2E01_wrapper(value, debug, **kwargs):
+def decode_2E01_wrapper(value, logger, **kwargs):
 	kind = get_kind(**kwargs)
-	return dc.decode_2E01(value, debug, kind)
+	return dc.decode_2E01(value, logger, kind)
 
 
-def decode_9201_wrapper(value, debug, **kwargs):
+def decode_9201_wrapper(value, logger, **kwargs):
 	kind = get_kind(**kwargs)
-	return dc.decode_9201(value, debug, kind)
+	return dc.decode_9201(value, logger, kind)
 
-def decode_space_separated_decimal_wrapper(value, debug, **kwargs):
+def decode_space_separated_decimal_wrapper(value, logger, **kwargs):
 	return [int(i) for i in value.split()]
 
-def decode_bitfield_wrapper(value, debug, **kwargs):
+def decode_bitfield_wrapper(value, logger, **kwargs):
 	value = int(value)
 	i = 0
 	output = []
 	while (1 << i) <= value:
 		bit_value = (1 << i) & value
 		if bit_value:
-			output.append(decode_enum_wrapper(i, debug, **kwargs))
+			output.append(decode_enum_wrapper(i, logger, **kwargs))
 		i += 1
 	return output
 
-def encode_int_wrapper(value, debug, **kwargs):
+def encode_int_wrapper(value, logger, **kwargs):
 	assert isinstance(value, (int, float)), f"number required but got {type(value).__name__}"
 	if (isinstance(value, float)):
-		dbg_print(debug, f"Warning {value} is a float, it will be truncated as an integer")
+		logger.warn(f"{value} is a float, it will be truncated as an integer", "If You did not modify your save and got this error, please report it")
 	return str(value)
 
-def encode_bool_wrapper(value, debug, **kwargs):
+def encode_bool_wrapper(value, logger, **kwargs):
 	assert isinstance(value, (int, float)), f"number required but got {type(value).__name__}"
-	if (debug and (value != 1 or value != 0)):
-		dbg_print(debug, f"Warning, {value} is not a boolean value !")
+	if (value != 1 or value != 0):
+		logger.warn(f"{value} is not a boolean value !", "It should be 1 or 0, Who knows what this will do")
 	return str(value)
 
-def encode_enum(value, debug, **kwargs):
+def encode_enum(value, logger, **kwargs):
 	assert isinstance(value, (int, float, str)), f"number/string required but got {type(value).__name__}"
 	kind = get_kind(**kwargs)
 	if (kind == None):
-		dbg_print(debug, f"Unknown kind {kwargs.get('kind', 'None')}")
+		logger.warn(f"Unknown kind {kwargs.get('kind', 'None')}", "Conversion might fail")
 	value = en.try_int_from_enum(value, kind)
 	assert value != None, f"Couldn't convert {value} to an integer id with kind {kind.__name__ if kind else 'None'}"
 	return value
 
-def encode_enum_wrapper(value, debug, **kwargs):
-	return str(encode_enum(value, debug, **kwargs))
+def encode_enum_wrapper(value, logger, **kwargs):
+	return str(encode_enum(value, logger, **kwargs))
 
-def encode_float_wrapper(value, debug, **kwargs):
+def encode_float_wrapper(value, logger, **kwargs):
 	assert isinstance(value, (int, float)), f"number required but got {type(value).__name__}"
 	return str(value)
 
-def encode_string_wrapper(value, debug, **kwargs):
+def encode_string_wrapper(value, logger, **kwargs):
 	assert isinstance(value, str), f"string required but got {type(value).__name__}"
 	return value
 
-def encode_2E01_wrapper(value, debug, **kwargs):
+def encode_2E01_wrapper(value, logger, **kwargs):
 	kind = get_kind(**kwargs)
 	if (kind == None):
-		dbg_print(debug, f"Unknown kind {kwargs.get('kind', 'None')}")
-	value, err = en.encode_2E01(value, debug, kind)
+		logger.warn(f"Unknown kind {kwargs.get('kind', 'None')}", "Might cause conversion failures")
+	value, err = en.encode_2E01(value, logger, kind)
 	assert not kind or not err, f"Couldn't convert {value} to an integer id with kind {kind.__name__ if kind else 'None'}"
 	return value
 
-def encode_9201_wrapper(value, debug, **kwargs):
-	value, err = en.encode_9201(value, debug)
+def encode_9201_wrapper(value, logger, **kwargs):
+	value, err = en.encode_9201(value, logger)
 	return value
 
-def encode_space_separated_decimal_wrapper(value, debug, **kwargs):
+def encode_space_separated_decimal_wrapper(value, logger, **kwargs):
 	assert isinstance(value, list), f"list required but got {type(value).__name__}"
 	for i in value:
 		assert isinstance(i, int), f"int required but got {type(value).__name__}"
 	return " ".join([str(i) for i in value])
 
 
-def encode_bitfield_wrapper(value, debug, **kwargs):
+def encode_bitfield_wrapper(value, logger, **kwargs):
 	assert isinstance(value, list), f"list required but got {type(value).__name__}"
 	output = 0
 	for item in value:
-		decoded_int = encode_enum(item, debug, **kwargs)
+		decoded_int = encode_enum(item, logger, **kwargs)
 		assert isinstance(decoded_int, (int, float)), f"Cannot insert non integer value {decoded_int} into a bitfield"
 		output |= 1 << decoded_int
 	return str(output)
@@ -183,7 +186,7 @@ def decode_file(b64lines, schema, logger):
 		item = lines.pop(0)
 		logger.debug(key, item)
 		try:
-			output[key] = line_handlers[schema[key]["type"]][0](item, False, **schema[key])
+			output[key] = line_handlers[schema[key]["type"]][0](item, logger, **schema[key])
 		except Exception as e:
 			log_except(logger, f"Error when decoding field {key}", e)
 			raise e
@@ -202,7 +205,7 @@ def encode_file(jsonlines, schema, logger):
 	for key in schema:
 		logger.debug(key)
 		try:
-			output.append(line_handlers[schema[key]["type"]][1](input_dir[key], False, **schema[key]))
+			output.append(line_handlers[schema[key]["type"]][1](input_dir[key], logger, **schema[key]))
 		except Exception as e:
 			log_except(logger, f"Error when encoding field {key}", e)
 			raise e
@@ -212,8 +215,7 @@ def encode_file(jsonlines, schema, logger):
 
 def logger_print(kind):
 	def stderr_print_with_title(title, content):
-		print(f"{kind} {title}\n", file=sys.stderr)
-		print(content, file=sys.stderr)
+		print(f"{kind}: {title}\n{content}", file=sys.stderr)
 	return stderr_print_with_title
 
 def noop(*args):
@@ -222,12 +224,12 @@ def noop(*args):
 class Logger:
 	def __init__(self, verbose=False, interactive=True):
 		if verbose:
-			self.debug = logger_print("Debug: ")
-			self.warn = logger_print("Warning: ")
+			self.debug = logger_print("Debug")
+			self.warn = logger_print("Warning")
 		else:
 			self.debug = noop
 			self.warn = noop
-		self.error = logger_print("Error: ")
+		self.error = logger_print("Error")
 		self.interactive=True
 
 if __name__ == "__main__":
