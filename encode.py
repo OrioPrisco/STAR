@@ -53,7 +53,7 @@ def	output_all(entries, header):
 	assert len(length) == 6, f"Error while encoding {data}, length too big"
 	return f"{header}{length}000000{''.join(entries)}"
 
-def	encode_9201(json_dict, debug = False, _ = None):
+def	encode_9201(json_dict, logger, _ = None):
 	assert isinstance(json_dict, dict), f"9201 encoder can only encode dicts, not {type(json_dict).__name__}"
 	encoded_dict = []
 	for key in json_dict:
@@ -70,7 +70,7 @@ def	try_int_from_enum(value, kind=None):
 	except KeyError:
 		return None
 
-def	encode_2E01(json_array, debug = False, kind = None):
+def	encode_2E01(json_array, logger, kind = None):
 	assert isinstance(json_array, list), f"2E01 encoder can only encode arrays, not {type(json_array).__name__}"
 	encoded_array = []
 	err = False
@@ -78,8 +78,7 @@ def	encode_2E01(json_array, debug = False, kind = None):
 		item_as_int = try_int_from_enum(item, kind)
 		if item_as_int == None:
 			err = True
-			if debug:
-				print(f"Warning, couldn't convert {item} to an integer value", file=sys.stderr)
+			logger.warn(f"couldn't convert {item} to an integer value", "")
 		else:
 			item = item_as_int
 		encoded_array.append(encode_data(item))
@@ -92,11 +91,11 @@ header_encoders = {
 
 valid_headers = header_encoders.keys()
 
-def encode_header(data, header, debug = False, kind = None):
+def encode_header(data, header, logger, kind = None):
 	if header == None:
 		if isinstance(data, dict):
 			header="9201"
 		elif isinstance(data, list):
 			header="2E01"
 	assert header in valid_headers, f"Unknown header {header}, expected one of {valid_headers}"
-	return header_encoders[header](data, debug, kind)
+	return header_encoders[header](data, logger, kind)

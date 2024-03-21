@@ -59,22 +59,20 @@ def	decode_entry(line, index):
 		index += chars
 		return (index - og_index, key, value)
 
-def	decode_9201(line, debug = False, _ = None):
+def	decode_9201(line, logger, _ = None):
 	index = 0
 	assert line[0:4] == "9201", f"Incorrect header : {line[index:index+4]}, expected 9201"
 	entries = {}
 	index = 4
 	length = int(line[index:index+6], 16)
 	index += 6
-	if debug:
-		print(f"{length} key value pairs", file=sys.stderr)
+	logger.debug(f"decoding 9201 {length} key value pairs", "")
 	index += 6 #padding
 	for i in range(length):
 		chars,key,value = decode_entry(line, index)
 		entries[key] = value
 		index += chars
-	if debug:
-		print(f"decoded {index} characters, {len(line) - index} remaining", file=sys.stderr)
+	logger.debug(f"decoded {index} characters, {len(line) - index} remaining", "")
 	return entries
 
 def	try_str_from_enum(value, kind=None):
@@ -87,28 +85,25 @@ def	try_str_from_enum(value, kind=None):
 	except ValueError:
 		return None
 
-def	decode_2E01(line, debug = False, kind = None):
+def	decode_2E01(line, logger, kind = None):
 	index = 0
 	assert line[0:4] == "2E01", f"Incorrect header : {line[index:index+4]}, expected 2E01"
 	entries = []
 	index = 4
 	length = int(line[index:index+6], 16)
 	index += 6
-	if debug:
-		print(f"{length} values", file=sys.stderr)
+	logger.debug(f"decoding 2E01 {length} values", "")
 	index+=6 # padding
-	for i in range(length):
+	for i in range(length): #todo : refactor this into decode_enum and use it in gamesave
 		chars,value = decode_data(line, index)
 		value_as_str = try_str_from_enum(value, kind)
 		if value_as_str == None:
-			if debug:
-				print(f"Warning, couldn't convert {value} to a string", file=sys.stderr)
+			logger.warn(f"couldn't convert {value} to a string", "")
 		else:
 			value = value_as_str
 		entries.append(value)
 		index+= chars
-	if debug:
-		print(f"decoded {index} characters, {len(line) - index} remaining", file=sys.stderr)
+	logger.debug(f"decoded {index} characters, {len(line) - index} remaining", "")
 	return entries
 
 header_decoders = {
@@ -118,8 +113,8 @@ header_decoders = {
 
 valid_headers = header_decoders.keys()
 
-def	decode_header(line, header, debug = False, kind = None):
+def	decode_header(line, header, logger, kind = None):
 	if header == None:
 		header = line[0:4]
 	assert header in valid_headers, f"Unknown header {header}, expected one of {valid_headers}"
-	return header_decoders[header](line, debug, kind)
+	return header_decoders[header](line, logger, kind)

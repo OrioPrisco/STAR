@@ -184,7 +184,7 @@ def decode_file(b64lines, schema, logger):
 		raise e
 	for key in schema:
 		item = lines.pop(0)
-		logger.debug(key, item)
+		logger.debug(key, f"value {item}")
 		try:
 			output[key] = line_handlers[schema[key]["type"]][0](item, logger, **schema[key])
 		except Exception as e:
