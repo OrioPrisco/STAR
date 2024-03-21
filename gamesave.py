@@ -42,24 +42,26 @@ def decode_int_wrapper(value, logger, **kwargs):
 	return int(value)
 
 def decode_bool_wrapper(value, logger, **kwargs):
+	field = kwargs["field"]
 	value = int(value)
 	if (value != 1 and value != 0):
-		logger.warn(f"{value} is not a boolean value !", "If You did not modify your save and got this error, please report it")
+		logger.warn(f"{field}: {value} is not a boolean value !", "If You did not modify your save and got this error, please report it")
 	return value
 
 
 def decode_enum_wrapper(value, logger, **kwargs):
 	kind = get_kind(**kwargs)
+	field = kwargs["field"]
 	value_as_str = dc.try_str_from_enum(int(value), kind)
 	if (value_as_str == None and kind):
-		message = f"Couldn't convert {value} to a string using kind {kind.__name__ if kind else 'None'}"
+		message = f"{field}: Couldn't convert {value} to a string using kind {kind.__name__ if kind else 'None'}"
 		if kind == enums["unique"]:
 			logger.debug(message, "Not all uniques are currently known, this is pretty normal")
 		else:
 			logger.warn(message, "If You did not modify your save and got this error, please report it")
 		return int(value)
 	if (value_as_str == None):
-		logger.debug(f"Couldn't convert {value} to a string using no kind", "this is most likely normal")
+		logger.debug(f"{field}: Couldn't convert {value} to a string using no kind", "this is most likely normal")
 		return int(value)
 	return value_as_str
 
@@ -94,21 +96,24 @@ def decode_bitfield_wrapper(value, logger, **kwargs):
 
 def encode_int_wrapper(value, logger, **kwargs):
 	assert isinstance(value, (int, float)), f"number required but got {type(value).__name__}"
+	field = kwargs["field"]
 	if (isinstance(value, float)):
-		logger.warn(f"{value} is a float, it will be truncated as an integer", "If You did not modify your save and got this error, please report it")
+		logger.warn(f"{field}: {value} is a float, it will be truncated as an integer", "If You did not modify your save and got this error, please report it")
 	return str(value)
 
 def encode_bool_wrapper(value, logger, **kwargs):
+	field = kwargs["field"]
 	assert isinstance(value, (int, float)), f"number required but got {type(value).__name__}"
 	if (value != 1 or value != 0):
-		logger.warn(f"{value} is not a boolean value !", "It should be 1 or 0, Who knows what this will do")
+		logger.warn(f"{field}: {value} is not a boolean value !", "It should be 1 or 0, Who knows what this will do")
 	return str(value)
 
 def encode_enum(value, logger, **kwargs):
 	assert isinstance(value, (int, float, str)), f"number/string required but got {type(value).__name__}"
 	kind = get_kind(**kwargs)
+	field = kwargs["field"]
 	if (kind == None):
-		logger.warn(f"Unknown kind {kwargs.get('kind', 'None')}", f"Might cause conversion failures for {value}")
+		logger.warn(f"{field}: Unknown kind {kwargs.get('kind', 'None')}", f"Might cause conversion failures for {value}")
 	value = en.try_int_from_enum(value, kind)
 	assert value != None, f"Couldn't convert {value} to an integer id with kind {kind.__name__ if kind else 'None'}"
 	return value
@@ -126,8 +131,12 @@ def encode_string_wrapper(value, logger, **kwargs):
 
 def encode_2E01_wrapper(value, logger, **kwargs):
 	kind = get_kind(**kwargs)
+	field = kwargs["field"]
 	if (kind == None):
-		logger.warn(f"Unknown kind {kwargs.get('kind', 'None')}", f"Might cause conversion failures for {value}")
+		if field == "likely unlocks line 4" or field == "likely unlocks line 5":
+			logger.debug(f"{field}: Unknown kind {kwargs.get('kind', 'None')}", f"This values are not quite known yet, this is quite normal")
+		else:
+			logger.warn(f"{field}: Unknown kind {kwargs.get('kind', 'None')}", f"Might cause conversion failures for {value}")
 	value, err = en.encode_2E01(value, logger, kind)
 	assert not kind or not err, f"Couldn't convert {value} to an integer id with kind {kind.__name__ if kind else 'None'}"
 	return value
