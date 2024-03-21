@@ -169,11 +169,11 @@
 				document.getElementById("work-area").addEventListener("input", check_json);
 			}
 			function on_download(extension) {
-				clear_notifications();
 				const anchor = document.getElementById("hack-anchor");
 				text = document.getElementById("work-area").value
 				anchor.download = "gamesave." + extension;
 				if (extension == "d13") {
+					clear_notifications();
 					try {
 						text = encode_json(text, regular_logger)
 					} catch (error) {
