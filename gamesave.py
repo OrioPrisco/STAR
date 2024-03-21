@@ -108,7 +108,7 @@ def encode_enum(value, logger, **kwargs):
 	assert isinstance(value, (int, float, str)), f"number/string required but got {type(value).__name__}"
 	kind = get_kind(**kwargs)
 	if (kind == None):
-		logger.warn(f"Unknown kind {kwargs.get('kind', 'None')}", "Conversion might fail")
+		logger.warn(f"Unknown kind {kwargs.get('kind', 'None')}", f"Might cause conversion failures for {value}")
 	value = en.try_int_from_enum(value, kind)
 	assert value != None, f"Couldn't convert {value} to an integer id with kind {kind.__name__ if kind else 'None'}"
 	return value
@@ -127,7 +127,7 @@ def encode_string_wrapper(value, logger, **kwargs):
 def encode_2E01_wrapper(value, logger, **kwargs):
 	kind = get_kind(**kwargs)
 	if (kind == None):
-		logger.warn(f"Unknown kind {kwargs.get('kind', 'None')}", "Might cause conversion failures")
+		logger.warn(f"Unknown kind {kwargs.get('kind', 'None')}", f"Might cause conversion failures for {value}")
 	value, err = en.encode_2E01(value, logger, kind)
 	assert not kind or not err, f"Couldn't convert {value} to an integer id with kind {kind.__name__ if kind else 'None'}"
 	return value
