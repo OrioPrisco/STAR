@@ -186,7 +186,7 @@ def decode_file(b64lines, schema, logger):
 		item = lines.pop(0)
 		logger.debug(key, f"value {item}")
 		try:
-			output[key] = line_handlers[schema[key]["type"]][0](item, logger, **schema[key])
+			output[key] = line_handlers[schema[key]["type"]][0](item, logger, field=key, **schema[key])
 		except Exception as e:
 			log_except(logger, f"Error when decoding field {key}", e)
 			raise e
@@ -205,7 +205,7 @@ def encode_file(jsonlines, schema, logger):
 	for key in schema:
 		logger.debug(key)
 		try:
-			output.append(line_handlers[schema[key]["type"]][1](input_dir[key], logger, **schema[key]))
+			output.append(line_handlers[schema[key]["type"]][1](input_dir[key], logger, field=key, **schema[key]))
 		except Exception as e:
 			log_except(logger, f"Error when encoding field {key}", e)
 			raise e
