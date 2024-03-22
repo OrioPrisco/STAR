@@ -153,7 +153,7 @@ class Cartridge(Enum):
 	member_card = 16
 	pickaxe = 17
 	hammer = 18
-	glowing_run = 19
+	glowing_rune = 19
 	treasure_chest = 20
 	err_integer_overflow = 21
 	battery = 22
