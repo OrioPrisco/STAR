@@ -129,9 +129,9 @@ def encode_2E01_wrapper(value, logger, **kwargs):
 			logger.debug("{field}: Skipping conversion to integer", "Normal but means no validation is performed")
 		else:
 			logger.warn(f"{field}: Unknown kind {kwargs.get('kind', 'None')}", f"Might cause conversion failures for {value}")
-	value, err = en.encode_2E01(value, logger, kind)
-	assert not kind or not err, f"Couldn't convert {value} to an integer id with kind {kind.__name__ if kind else 'None'}"
-	return value
+	newvalue, errors = en.encode_2E01(value, logger, kind)
+	assert not (kind and errors), f"Couldn't convert {errors} to an integer id with kind {kind.__name__}"
+	return newvalue
 
 def encode_9201_wrapper(value, logger, **kwargs):
 	value, err = en.encode_9201(value, logger)
