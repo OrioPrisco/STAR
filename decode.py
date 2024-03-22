@@ -59,7 +59,7 @@ def	decode_entry(line, index):
 		index += chars
 		return (index - og_index, key, value)
 
-def	decode_9201(line, logger, _ = None):
+def	decode_9201(line, logger, _ = None, field=""):
 	index = 0
 	assert line[0:4] == "9201", f"Incorrect header : {line[index:index+4]}, expected 9201"
 	entries = {}
@@ -72,7 +72,14 @@ def	decode_9201(line, logger, _ = None):
 		chars,key,value = decode_entry(line, index)
 		entries[key] = value
 		index += chars
-	logger.debug(f"decoded {index} characters, {len(line) - index} remaining", "")
+	remaining = len(line) - index
+	if field:
+		field += ': '
+	message = f"{field}decoded {index} characters, {remaining} remaining"
+	if remaining:
+		logger.warn(message, "Some characters were left in the dictionnary but not decoded, This might be an Implementation error")
+	else:
+		logger.debug(message, "")
 	return entries
 
 def	try_str_from_enum(value, kind=None):
@@ -101,7 +108,7 @@ def decode_enum(value, logger, kind, field=""):
 		return int(value)
 	return value_as_str
 
-def	decode_2E01(line, logger, kind = None):
+def	decode_2E01(line, logger, kind = None, field=""):
 	index = 0
 	assert line[0:4] == "2E01", f"Incorrect header : {line[index:index+4]}, expected 2E01"
 	entries = []
@@ -114,7 +121,14 @@ def	decode_2E01(line, logger, kind = None):
 		chars,value = decode_data(line, index)
 		entries.append(decode_enum(value, logger, kind))
 		index+= chars
-	logger.debug(f"decoded {index} characters, {len(line) - index} remaining", "")
+	remaining = len(line) - index
+	if field:
+		field += ': '
+	message = f"{field}decoded {index} characters, {remaining} remaining"
+	if remaining:
+		logger.warn(message, "Some characters were left in the array but not decoded, This might be an Implementation error")
+	else:
+		logger.debug(message, "")
 	return entries
 
 header_decoders = {

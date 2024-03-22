@@ -63,12 +63,12 @@ def decode_string_wrapper(value, logger, **kwargs):
 
 def decode_2E01_wrapper(value, logger, **kwargs):
 	kind = get_kind(**kwargs)
-	return dc.decode_2E01(value, logger, kind)
+	return dc.decode_2E01(value, logger, kind, kwargs.get("field"))
 
 
 def decode_9201_wrapper(value, logger, **kwargs):
 	kind = get_kind(**kwargs)
-	return dc.decode_9201(value, logger, kind)
+	return dc.decode_9201(value, logger, kind, kwargs.get("field"))
 
 def decode_space_separated_decimal_wrapper(value, logger, **kwargs):
 	return [int(i) for i in value.split()]
