@@ -10,7 +10,8 @@ import enums
 import base64
 import binascii
 import traceback
-from logger import Logger
+from utils import Logger
+from utils import minify_arrays
 
 
 enums = {
@@ -228,7 +229,7 @@ if __name__ == "__main__":
 	if args.decode:
 		b64lines = "".join(args.input.readlines())
 		output = decode_file(b64lines, schema, logger)
-		print(json.dumps(output, indent=4))
+		print(minify_arrays(json.dumps(output, indent=4)))
 	else:
 		jsonlines = "".join(args.input.readlines())
 		output = encode_file(jsonlines, schema, logger)

@@ -6,7 +6,7 @@ import argparse
 import json
 import sys
 import enums
-from logger import Logger
+from utils import Logger
 
 enum_types = {
 	"weapon" : enums.Weapon,

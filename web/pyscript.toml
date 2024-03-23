@@ -2,7 +2,7 @@ name = "STAR web"
 packages = []
 [files]
 "../gamesave.py" = "./gamesave.py"
-"../logger.py" = "./logger.py"
+"../utils.py" = "./utils.py"
 "../decode.py" = "./decode.py"
 "../encode.py" = "./encode.py"
 "../enums.py" = "./enums.py"

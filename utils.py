@@ -20,3 +20,19 @@ class Logger:
 			self.warn = noop
 		self.error = logger_print("Error")
 		self.interactive=True
+
+import json
+
+def minify_arrays(json_string):
+	start = 0
+	result = ""
+	decoder = json.JSONDecoder()
+	while True:
+		brakcet_index = json_string.find("[", start)
+		if brakcet_index == -1:
+			result += json_string[start:]
+			return result
+		result += json_string[start:brakcet_index]
+		array, end_array = decoder.raw_decode(json_string, brakcet_index)
+		result += json.dumps(array)
+		start = end_array
