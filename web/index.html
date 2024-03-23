@@ -78,7 +78,7 @@
 		</style>
 		<!-- my code -->
 		<script>
-			regular_logger = {interactive:false, warn:add_warning, error:add_error, debug: () => {}}
+			regular_logger = {interactive:false, warn:add_warning, error:add_error, debug: console.log}
 			function clear_notifications() {
 				document.getElementById("errors").replaceChildren();
 				document.getElementById("warnings").replaceChildren();
