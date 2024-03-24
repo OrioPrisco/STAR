@@ -339,6 +339,7 @@ class Bomb(Enum):
 	shattering = 10
 
 class Blessing(Enum):
+	none = -1
 	flame = 0
 	frost = 1
 	earth = 2
