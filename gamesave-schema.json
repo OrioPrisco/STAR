@@ -121,7 +121,7 @@
 "skully weapon data" : {"type" : "9201"},
 "unknown value line 122" : {"type" : "int"},
 "unknown value line 123" : {"type" : "int"},
-"unknown value line 124" : {"type" : "int"},
+"skully mode" : {"type" : "bool"},
 "unknown value line 125" : {"type" : "int"},
 "unknown value line 126" : {"type" : "int"},
 "unknown value line 127" : {"type" : "int"},
