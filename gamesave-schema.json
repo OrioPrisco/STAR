@@ -109,7 +109,7 @@
 "unknown value line 109" : {"type" : "int"},
 "unknown value line 110" : {"type" : "int"},
 "renegade clip size" : {"type" : "int"},
-"reneade blessing/curse" : {"type" : "enum", "kind" : "Blessed"},
+"renegade blessing/curse" : {"type" : "enum", "kind" : "Blessed"},
 "renegade unique projectile" : {"type" : "enum", "TODO ADD KIND" : "uniques effects"},
 "renegade constant effect" : {"type" : "enum", "TODO ADD KIND" : "uniques effects"},
 "renegade effect 3 ?" : {"type" : "enum", "TODO ADD KIND" : "uniques effects"},
