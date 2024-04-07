@@ -105,9 +105,9 @@ def encode_enum(value, logger, **kwargs):
 	field = kwargs["field"]
 	if (kind == None):
 		logger.debug(f"{field}: Unknown kind", f"These values are not quite known yet, this is quite normal")
-	value = en.try_int_from_enum(value, kind)
-	assert value != None, f"Couldn't convert {value} to an integer id with kind {kind.__name__ if kind else 'None'}"
-	return value
+	new_value = en.try_int_from_enum(value, kind)
+	assert new_value != None, f"Couldn't convert {value} to an integer id with kind {kind.__name__ if kind else 'None'}"
+	return new_value
 
 def encode_enum_wrapper(value, logger, **kwargs):
 	return str(encode_enum(value, logger, **kwargs))
