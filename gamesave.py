@@ -41,6 +41,11 @@ def log_except(logger, title, exception):
 
 def decode_int_wrapper(value, logger, **kwargs):
 	# TODO : handle length of
+	field = kwargs["field"]
+	value_as_float = float(value)
+	if (int(value_as_float) != value_as_float):
+		logger.warn(f"{field} : {value} is not an int !", "If you did not modify your save and got this error, please report it")
+		return value_as_float
 	return int(value)
 
 def decode_bool_wrapper(value, logger, **kwargs):
@@ -89,7 +94,7 @@ def encode_int_wrapper(value, logger, **kwargs):
 	assert isinstance(value, (int, float)), f"number required but got {type(value).__name__}"
 	field = kwargs["field"]
 	if (isinstance(value, float)):
-		logger.warn(f"{field}: {value} is a float, it will be truncated as an integer", "If You did not modify your save and got this error, please report it")
+		logger.warn(f"{field}: {value} is a float and not an int !", "If You did not modify your save and got this error, please report it")
 	return str(value)
 
 def encode_bool_wrapper(value, logger, **kwargs):
