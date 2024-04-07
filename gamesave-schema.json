@@ -84,7 +84,7 @@
 "firerate" : {"type" : "float"},
 "unknown value line 85" : {"type" : "int"},
 "unknown value line 86" : {"type" : "int"},
-"clip size" : {"type" : "int"},
+"clip size" : {"type" : "float"},
 "unknown value line 88" : {"type" : "float"},
 "unknown value line 89" : {"type" : "float"},
 "blessing/curse" : {"type" : "enum", "kind" : "Blessed"},
