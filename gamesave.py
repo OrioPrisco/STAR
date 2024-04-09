@@ -204,6 +204,19 @@ def decode_file(b64lines, schema, logger):
 			raise e
 	return output
 
+def get_entry(key, schema_entry, input_dir):
+	ret = input_dir.get(key)
+	if ret != None:
+		return ret
+	old_names = schema_entry.get("old names")
+	if not old_names:
+		raise Exception(f"Entry not found '{key}'")
+	for old_name in old_names:
+		ret = input_dir.get(old_name)
+		if ret != None:
+			return ret
+	raise Exception(f"Entry not found [{key}/{'/'.join(old_names)}]")
+
 def encode_file(jsonlines, schema, logger):
 	try:
 		input_dir = json.loads(jsonlines)
@@ -217,7 +230,7 @@ def encode_file(jsonlines, schema, logger):
 	for key in schema:
 		logger.debug(key)
 		try:
-			output.append(line_handlers[schema[key]["type"]][1](input_dir[key], logger, field=key, **schema[key]))
+			output.append(line_handlers[schema[key]["type"]][1](get_entry(key, schema[key], input_dir), logger, field=key, **schema[key]))
 		except Exception as e:
 			log_except(logger, f"Error when encoding field {key}", e)
 			raise e
