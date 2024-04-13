@@ -73,7 +73,8 @@
 		<!-- Splash screen-->
 		<script type="module">
 			const loading = document.getElementById('loading');
-			addEventListener('py:all-done', () => loading.close());
+			const dialogwarning = document.getElementById('dialog-warning');
+			addEventListener('py:all-done', () => {loading.close();dialogwarning.showModal()});
 			loading.showModal();
 		</script>
 		<style>
@@ -194,6 +195,11 @@
 		<noscript>You need to enable JavaScript to run this app.</noscript>
 		<dialog id="loading">
 			<h1>Loading...</h1>
+		</dialog>
+		<dialog id="dialog-warning">
+			<h1>Manipulating your savefile can result in data loss</h1>
+			<p>Make sure to visit the <a href="https://github.com/OrioPrisco/STAR/wiki">wiki</a> to learn more</p>
+			<button onclick="document.getElementById('dialog-warning').close()">Ok</button>
 		</dialog>
 		<h1>STAR: savefile tool for Star of Providence</h1>
 		<div style="width:90%; margin: auto; display:flex; flex-flow:column; flex: 1 1 75vh;" class="pyscript">
