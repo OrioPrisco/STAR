@@ -6,7 +6,7 @@ For the website interface [click here](https://orioprisco.github.io/STAR/web/)
 
 ## ⚠️ Warning ⚠️
 
-The Run savefile contains some information that gets copied back to your permanent savefile when you end/quit the run  
+The Run file (gamesave.d13) contains some information that gets copied back to your permanent savefile (savedata\_dlc1.d13) when you end/quit the run  
 For this reason, it is not recommended that you load previous run files and that you only load savefiles that you created  
 Doing otherwise might result in data loss (I've experienced some of it myself)
 
