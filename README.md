@@ -1,8 +1,8 @@
-# Savefile Tool : Alpha Release
+# Savefile Tool : Arachnid Release
 
 Python scripts to decode Star of Providence, (formerly known as Monolith) save files  
-This is an alpha, Some values are not yet documented and there might bugs  
-For the website interface [click here](https://orioprisco.github.io/STAR/web/)  
+This is still an alpha, Some values are not yet documented and there might bugs  
+For the web interface [click here](https://orioprisco.github.io/STAR/web/)  
 
 ## ⚠️ Warning ⚠️
 
