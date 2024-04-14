@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/env python3
 
 import encode as en
 import decode as dc
@@ -31,7 +31,7 @@ enums = {
 }
 
 def get_kind(**kwargs):
-	kind_name = kwargs.get("kind", None)
+	kind_name = kwargs.get("kind")
 	if (kind_name == None):
 		return None
 	return enums[kind_name.lower()]
@@ -61,10 +61,10 @@ def decode_enum_wrapper(value, logger, **kwargs):
 	field = kwargs["field"]
 	return dc.decode_enum(int(value), logger, kind, field)
 
-def decode_float_wrapper(value, logger, **kwargs):
+def decode_float_wrapper(value, _logger, **_kwargs):
 	return float(value)
 
-def decode_string_wrapper(value, logger, **kwargs):
+def decode_string_wrapper(value, _logger, **_kwargs):
 	return value
 
 def decode_2E01_wrapper(value, logger, **kwargs):
@@ -76,7 +76,7 @@ def decode_9201_wrapper(value, logger, **kwargs):
 	kind = get_kind(**kwargs)
 	return dc.decode_9201(value, logger, kind, kwargs.get("field"))
 
-def decode_space_separated_decimal_wrapper(value, logger, **kwargs):
+def decode_space_separated_decimal_wrapper(value, _logger, **_kwargs):
 	return [int(i) for i in value.split()]
 
 def decode_bitfield_wrapper(value, logger, **kwargs):
@@ -122,11 +122,11 @@ def encode_enum(value, logger, **kwargs):
 def encode_enum_wrapper(value, logger, **kwargs):
 	return str(encode_enum(value, logger, **kwargs))
 
-def encode_float_wrapper(value, logger, **kwargs):
+def encode_float_wrapper(value, _logger, **_kwargs):
 	assert isinstance(value, (int, float)), f"number required but got {type(value).__name__}"
 	return str(value)
 
-def encode_string_wrapper(value, logger, **kwargs):
+def encode_string_wrapper(value, _logger, **_kwargs):
 	assert isinstance(value, str), f"string required but got {type(value).__name__}"
 	return value
 
@@ -144,11 +144,11 @@ def encode_2E01_wrapper(value, logger, **kwargs):
 	assert not (kind and errors), f"Couldn't convert {errors} to an integer id with kind {kind.__name__}\n{get_all_enum_values(kind)}"
 	return newvalue
 
-def encode_9201_wrapper(value, logger, **kwargs):
-	value, err = en.encode_9201(value, logger)
+def encode_9201_wrapper(value, logger, **_kwargs):
+	value, _err = en.encode_9201(value, logger)
 	return value
 
-def encode_space_separated_decimal_wrapper(value, logger, **kwargs):
+def encode_space_separated_decimal_wrapper(value, _logger, **_kwargs):
 	assert isinstance(value, list), f"list required but got {type(value).__name__}"
 	for i in value:
 		assert isinstance(i, int), f"int required but got {type(value).__name__}"
@@ -186,7 +186,7 @@ def decode_file(b64lines, schema, logger):
 			log_except(logger, f"Couldn't decode the base64 (.d13) file. Corrupted file ?", e)
 		raise e
 	except ValueError as e:
-		logger_except(logger, "Non ascii character in the base64 (.d13) file", e)
+		log_except(logger, "Non ascii character in the base64 (.d13) file", e)
 		raise e
 	output = {}
 	try:

@@ -1,10 +1,10 @@
 import gamesave
 import json
-import traceback
 from utils import minify_arrays
 
 def decode_gamesave(string, logger):
-	schema = json.load(open("./gamesave-schema.json", "r"))
+	with open("./gamesave-schema.json", "rt") as f:
+		schema = json.load(f)
 	try:
 		decoded = gamesave.decode_file(string, schema, logger)
 		pretty = minify_arrays(json.dumps(decoded, indent=4))
@@ -13,7 +13,8 @@ def decode_gamesave(string, logger):
 		raise e
 
 def encode_json(string, logger):
-	schema = json.load(open("./gamesave-schema.json", "r"))
+	with open("./gamesave-schema.json", "rt") as f:
+		schema = json.load(f)
 	try:
 		encoded = gamesave.encode_file(string, schema, logger)
 		return encoded

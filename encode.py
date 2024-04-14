@@ -1,10 +1,7 @@
-#!/bin/python3
+#!/usr/bin/env python3
 
-import sys
 import binascii
 import struct
-import json
-import argparse
 import re
 
 hex_regex = re.compile(r'0x([0-9A-Fa-f]*)')
@@ -50,10 +47,10 @@ def	encode_entry(key, value):
 
 def	output_all(entries, header):
 	length = f"{len(entries):06x}".upper()
-	assert len(length) == 6, f"Error while encoding {data}, length too big"
+	assert len(length) == 6, f"Error while encoding {entries}, length too big"
 	return f"{header}{length}000000{''.join(entries)}"
 
-def	encode_9201(json_dict, logger, _ = None):
+def	encode_9201(json_dict, _logger, _ = None):
 	assert isinstance(json_dict, dict), f"9201 encoder can only encode dicts, not {type(json_dict).__name__}"
 	encoded_dict = []
 	for key in json_dict:

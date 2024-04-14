@@ -1,10 +1,7 @@
-#!/bin/python3
+#!/usr/bin/env python3
 
 import binascii
 import struct
-import json
-import sys
-import argparse
 
 """
 returns (chars decoded, string)
@@ -68,7 +65,7 @@ def	decode_9201(line, logger, _ = None, field=""):
 	index += 6
 	logger.debug(f"decoding 9201 {length} key value pairs", "")
 	index += 6 #padding
-	for i in range(length):
+	for _ in range(length):
 		chars,key,value = decode_entry(line, index)
 		entries[key] = value
 		index += chars
@@ -117,7 +114,7 @@ def	decode_2E01(line, logger, kind = None, field=""):
 	index += 6
 	logger.debug(f"decoding 2E01 {length} values", "")
 	index+=6 # padding
-	for i in range(length):
+	for _ in range(length):
 		chars,value = decode_data(line, index)
 		entries.append(decode_enum(value, logger, kind))
 		index+= chars

@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/env python3
 
 from enum import Enum
 
@@ -21,7 +21,7 @@ class Upgrade(Enum):
 	scrap_runner = 16
 	capacity = 17
 
-class Keyword (Enum):
+class Keyword(Enum):
 	piercing = 0
 	ricochet = 1
 	split = 2

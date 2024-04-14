@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/env python3
 
 import encode as en
 import decode as dc
@@ -32,14 +32,14 @@ if __name__ == "__main__":
 		args.kind = enum_types[args.kind]
 	if args.kind and args.type == "9201":
 		parser.print_usage();
-		print(f"{__file__}: error: -k/--kind can only be used with 2E01")
+		logger.error(f"-k/--kind can only be used with 2E01", "")
 		exit(1)
 	if args.kind and not args.type:
-		logger.debug(f"{__file__}: Warning: -k/--kind can only be used with 2E01", "")
+		logger.warn(f"-k/--kind can only be used with 2E01", "")
 	if args.decode:
 		for line in args.input.readlines():
 			output = dc.decode_header(line, args.type, logger, args.kind)
-			print(json.dumps(output, indent=4))
+			logger.debug(json.dumps(output, indent=4), "")
 	else:
 		decoder = json.JSONDecoder();
 		inputs = args.input.read().strip();
@@ -47,6 +47,6 @@ if __name__ == "__main__":
 			json_obj, offset = decoder.raw_decode(inputs)
 			logger.debug(f"{offset} characters to decode", "")
 			line, err = en.encode_header(json_obj, args.type, logger, args.kind)
-			print(line)
+			logger.debug(line, "")
 			inputs = inputs[offset:].strip()
-			logger.debug(f"now decoding `{inputs}`", file=sys.stderr)
+			logger.debug(f"now decoding `{inputs}`", "")

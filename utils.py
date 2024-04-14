@@ -5,7 +5,7 @@ def logger_print(kind):
 		print(f"{kind}: {title}\n{content}", file=sys.stderr)
 	return stderr_print_with_title
 
-def noop(*args):
+def noop(*_):
 	pass
 
 class Logger:
@@ -19,7 +19,7 @@ class Logger:
 		else:
 			self.warn = noop
 		self.error = logger_print("Error")
-		self.interactive=True
+		self.interactive = interactive
 
 import json
 
@@ -36,19 +36,19 @@ def minify_arrays(json_string, to_minify = default_to_minify):
 	result = ""
 	decoder = json.JSONDecoder()
 	while True:
-		brakcet_index = json_string.find("[", start)
-		if brakcet_index == -1:
+		bracket_index = json_string.find("[", start)
+		if bracket_index == -1:
 			result += json_string[start:]
 			return result
-		name_end_index = json_string.rfind("\"", start, brakcet_index)
+		name_end_index = json_string.rfind("\"", start, bracket_index)
 		if name_end_index != -1:
 			name_begin_index = json_string.rfind("\"", start, name_end_index) + 1
 		if name_end_index == -1 or name_begin_index == -1 or json_string[name_begin_index:name_end_index] in to_minify:
-			result += json_string[start:brakcet_index]
-			array, end_array = decoder.raw_decode(json_string, brakcet_index)
+			result += json_string[start:bracket_index]
+			array, end_array = decoder.raw_decode(json_string, bracket_index)
 			result += json.dumps(array)
 			start = end_array
 		else:
-			array, end_array = decoder.raw_decode(json_string, brakcet_index)
+			array, end_array = decoder.raw_decode(json_string, bracket_index)
 			result += json_string[start:end_array]
 			start = end_array
