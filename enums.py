@@ -299,7 +299,7 @@ class Unlock(Enum):
 	energy_bomb = 1036
 	second_wind = 1010
 	care_package = 1030
-	""""
+	"""
 	#non togglable ? off on new save presumably
 	1012.0,
 	1021.0,

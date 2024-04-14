@@ -14,21 +14,21 @@ def	encode_hex_string(data):
 	assert len(num) == 16, f"Number too big {data}"
 	return "00" + "000000" + num
 
-"""
-takes a string without qutations marks
-returns the encoded representation of that string
-"""
 def	encode_str(data):
+	"""
+	takes a string without qutations marks
+	returns the encoded representation of that string
+	"""
 	length = f"{len(data):08x}".upper()
 	assert len(length) == 8, f"Error while encoding {data}, length too big"
 	data_as_hex = "".join([hex(ord(i))[2:4].upper() for i in data])
 	return "01" + length + "000000" + data_as_hex
 
-"""
-takes a float
-00 + padding + binary representation of float
-"""
 def	encode_num(data):
+	"""
+	takes a float
+	00 + padding + binary representation of float
+	"""
 	return "00" + "000000" + binascii.hexlify(struct.pack('d', float(data))).decode('utf-8').upper()
 
 def	encode_data(data, key = ""):

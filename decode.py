@@ -3,33 +3,33 @@
 import binascii
 import struct
 
-"""
-returns (chars decoded, string)
-"""
 def decode_str(line, index):
+	"""
+	returns (chars decoded, string)
+	"""
 	length = int(line[index:index+8], 16) #length is in bytes, one char is 1 nibble
 	index += 8 + 6 #num + padding
 	data = line[index:index+(length * 2)]
 	data_as_str = "".join([chr(int(data[i*2:(i+1)*2], 16)) for i in range(length)])
 	return (8 + 6 + length * 2, data_as_str)
 
-"""
-returns (char decoded, num)
-"""
 def decode_num(line, index):
+	"""
+	returns (char decoded, num)
+	"""
 	num = struct.unpack('d', binascii.unhexlify(line[index+6:index+22]))[0]
 	return (22, num)
 
-"""
-returns (char decoded, hex_str)
-"""
 def decode_hex_str(line, index):
+	"""
+	returns (char decoded, hex_str)
+	"""
 	return (22, "0x"+line[index+6:index+22])
 
-"""
-returns (chars decoded, data)
-"""
 def	decode_data(line, index, key = ""):
+	"""
+	returns (chars decoded, data)
+	"""
 	og_index = index
 	entry_type = int(line[index:index+2])
 	index += 2
@@ -45,16 +45,16 @@ def	decode_data(line, index, key = ""):
 	index += chars
 	return (index - og_index, entry)
 
-"""
-returns (chars decoded, key, value)
-"""
 def	decode_entry(line, index):
-		og_index = index
-		chars,key = decode_data(line, index)
-		index += chars
-		chars,value =  decode_data(line, index, key)
-		index += chars
-		return (index - og_index, key, value)
+	"""
+	returns (chars decoded, key, value)
+	"""
+	og_index = index
+	chars,key = decode_data(line, index)
+	index += chars
+	chars,value =  decode_data(line, index, key)
+	index += chars
+	return (index - og_index, key, value)
 
 def	decode_9201(line, logger, _ = None, field=""):
 	index = 0
