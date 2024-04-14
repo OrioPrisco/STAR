@@ -1,15 +1,19 @@
 import sys
 
+
 def logger_print(kind):
 	def stderr_print_with_title(title, content):
-		print(f"{kind}: {title}\n{content}", file=sys.stderr)
+		print(f"{kind}: {title}\n{content}", file = sys.stderr)
+
 	return stderr_print_with_title
+
 
 def noop(*_):
 	pass
 
+
 class Logger:
-	def __init__(self, verbose=False, warnings=False, interactive=True):
+	def __init__(self, verbose = False, warnings = False, interactive = True):
 		if verbose:
 			self.debug = logger_print("Debug")
 		else:
@@ -21,6 +25,7 @@ class Logger:
 		self.error = logger_print("Error")
 		self.interactive = interactive
 
+
 import json
 
 default_to_minify = [
@@ -31,6 +36,7 @@ default_to_minify = [
 	"likely bestiary data line 8",
 ]
 
+
 def minify_arrays(json_string, to_minify = default_to_minify):
 	start = 0
 	result = ""
@@ -40,10 +46,14 @@ def minify_arrays(json_string, to_minify = default_to_minify):
 		if bracket_index == -1:
 			result += json_string[start:]
 			return result
-		name_end_index = json_string.rfind("\"", start, bracket_index)
+		name_end_index = json_string.rfind('"', start, bracket_index)
 		if name_end_index != -1:
-			name_begin_index = json_string.rfind("\"", start, name_end_index) + 1
-		if name_end_index == -1 or name_begin_index == -1 or json_string[name_begin_index:name_end_index] in to_minify:
+			name_begin_index = json_string.rfind('"', start, name_end_index) + 1
+		if (
+			name_end_index == -1
+			or name_begin_index == -1
+			or json_string[name_begin_index:name_end_index] in to_minify
+		):
 			result += json_string[start:bracket_index]
 			array, end_array = decoder.raw_decode(json_string, bracket_index)
 			result += json.dumps(array)

@@ -2,6 +2,7 @@
 
 from enum import Enum
 
+
 class Upgrade(Enum):
 	salvage = 0
 	weatherproof = 1
@@ -20,6 +21,7 @@ class Upgrade(Enum):
 	quickening = 15
 	scrap_runner = 16
 	capacity = 17
+
 
 class Keyword(Enum):
 	piercing = 0
@@ -98,9 +100,10 @@ class Keyword(Enum):
 	sacred = 73
 	entropic = 74
 
+
 class Floor(Enum):
-	#(excavation) = 0 ??
-	#(excavation) = 1 ??
+	# (excavation) = 0 ??
+	# (excavation) = 1 ??
 	tutorial = 2
 	hub = 3
 	excavation = 4
@@ -113,6 +116,7 @@ class Floor(Enum):
 	temple = 11
 	nowhere = 12
 	d13_battle = 13
+
 
 class Weapon(Enum):
 	olddefault = 0
@@ -132,6 +136,7 @@ class Weapon(Enum):
 	bow = 14 # SCRAPPED
 	grenade = 15 # SCRAPPED
 	skully = 100
+
 
 class Cartridge(Enum):
 	magnifying_glass = 0
@@ -180,6 +185,7 @@ class Cartridge(Enum):
 	bandage = 43
 	contract = 44
 
+
 class Unique(Enum):
 	white_death = 1
 	dragon_breath = 2
@@ -219,12 +225,13 @@ class Unique(Enum):
 	zephyr = 36
 	excavator = 37
 	painstaker = 38
-	#shockwave = 39 # ? crashed, somethingto do with angle.
+	# shockwave = 39 # ? crashed, something to do with angle.
 	polar_star = 40
 	ace_of_swords = 41
 	sacred_arms = 42
 	grasp_of_entropy = 43
 	edge_of_reality = 44
+
 
 class Ship(Enum):
 	null = 0
@@ -233,6 +240,7 @@ class Ship(Enum):
 	chaos = 3
 	arena_blaster = 4
 	skully = 5
+
 
 class Active(Enum):
 	none = 0
@@ -274,6 +282,7 @@ class Active(Enum):
 	haunted_blaster = 36
 	king_s_ransom = 37
 	cleanup_crew = 38
+
 
 class Unlock(Enum):
 	sword = 1001
@@ -325,6 +334,7 @@ class Unlock(Enum):
 	more ?
 	"""
 
+
 class Bomb(Enum):
 	# 0 creates a glitched power bomb
 	laser = 1
@@ -338,6 +348,7 @@ class Bomb(Enum):
 	energy = 9
 	shattering = 10
 
+
 class Blessing(Enum):
 	none = -1
 	flame = 0
@@ -348,10 +359,12 @@ class Blessing(Enum):
 	abyss = 5
 	enigma = 6
 
+
 class Blessed(Enum):
 	blessed = -1
 	normal = 0
 	cursed = 1
+
 
 class Lethality(Enum):
 	mild = 0
