@@ -18,6 +18,7 @@ class Upgrade(Enum):
 	extra_pow = 11
 	fortune = 12
 	reserves = 13
+	power_eternal = 14
 	quickening = 15
 	scrap_runner = 16
 	capacity = 17
