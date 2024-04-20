@@ -129,4 +129,4 @@
 "unknown value line 129" : {"type" : "int"},
 "unknown value line 130" : {"type" : "int"},
 "unknown value line 131" : {"type" : "int"},
-"unknown value line 132" : {"type" : "int"}}
+"shield" : {"type" : "bool", "old names" : ["unknown value line 132"]}}
