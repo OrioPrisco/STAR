@@ -13,7 +13,7 @@
 "scrap" : {"type" : "float"},
 "score" : {"type" : "float"},
 "multiplier" : {"type" : "float"},
-"unknown value line 16" : {"type" : "int"},
+"max multiplier" : {"type" : "float", "old names": ["unknown value line 16"]},
 "bomb charges" : {"type" : "int"},
 "bombs" : {"type" : "2E01", "kind" : "Bomb"},
 "upgrades" : {"type" : "bitfield", "kind" : "Upgrade"},
