@@ -46,7 +46,7 @@
 "unknown value line 46" : {"type" : "int"},
 "seed" : {"type" : "int"},
 "rng1" : {"type" : "int"},
-"rmg2" : {"type" : "int"},
+"rng2" : {"type" : "int", "old names": ["rmg2"]},
 "time" : {"type" : "float"},
 "excavation data" : {"type" : "9201"},
 "archives data" : {"type" : "9201"},
