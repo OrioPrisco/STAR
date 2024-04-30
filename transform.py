@@ -61,7 +61,7 @@ if __name__ == "__main__":
 	if args.decode:
 		for line in args.input.readlines():
 			output = dc.decode_header(line, args.type, logger, args.kind)
-			logger.debug(json.dumps(output, indent = 4), "")
+			print(json.dumps(output, indent = 4))
 	else:
 		decoder = json.JSONDecoder()
 		inputs = args.input.read().strip()
@@ -69,6 +69,6 @@ if __name__ == "__main__":
 			json_obj, offset = decoder.raw_decode(inputs)
 			logger.debug(f"{offset} characters to decode", "")
 			line, err = en.encode_header(json_obj, args.type, logger, args.kind)
-			logger.debug(line, "")
+			print(line)
 			inputs = inputs[offset:].strip()
 			logger.debug(f"now decoding `{inputs}`", "")
