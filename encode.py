@@ -81,7 +81,7 @@ def try_int_from_enum(value, kind = None):
 		return None
 
 
-def encode_2E01(json_array, logger, kind = None):
+def encode_2E01(json_array, _logger, kind = None):
 	assert isinstance(
 		json_array, list
 	), f"2E01 encoder can only encode arrays, not {type(json_array).__name__}"
@@ -91,10 +91,6 @@ def encode_2E01(json_array, logger, kind = None):
 		item_as_int = try_int_from_enum(item, kind)
 		if item_as_int == None:
 			err.append(item)
-			if logger.interactive:
-				logger.warn(f"couldn't convert {item} to an integer value", "")
-			else:
-				logger.debug(f"couldn't convert {item} to an integer value", "")
 		else:
 			item = item_as_int
 		encoded_array.append(encode_data(item))

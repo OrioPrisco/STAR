@@ -197,6 +197,9 @@ def encode_2E01_wrapper(value, logger, **kwargs):
 	assert not (
 		kind and errors
 	), f"Couldn't convert {errors} to an integer id with kind {kind.__name__}\n{get_all_enum_values(kind)}"
+	if field != "jukebox musics":
+		for error in errors:
+			logger.warn(f"{field}: Couldn't convert {error} to an integer", "")
 	return newvalue
 
 

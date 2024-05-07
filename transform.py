@@ -69,6 +69,8 @@ if __name__ == "__main__":
 			json_obj, offset = decoder.raw_decode(inputs)
 			logger.debug(f"{offset} characters to decode", "")
 			line, err = en.encode_header(json_obj, args.type, logger, args.kind)
+			for error in err:
+				logger.warn(f"couldn't convert {error} to an integer value", "")
 			print(line)
 			inputs = inputs[offset:].strip()
 			logger.debug(f"now decoding `{inputs}`", "")
