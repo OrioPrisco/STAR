@@ -3,7 +3,10 @@ import sys
 
 def logger_print(kind):
 	def stderr_print_with_title(title, content):
-		print(f"{kind}: {title}\n{content}", file = sys.stderr)
+		if content:
+			print(f"{kind}: {title}\n{content}", file = sys.stderr)
+		else:
+			print(f"{kind}: {title}", file = sys.stderr)
 
 	return stderr_print_with_title
 
