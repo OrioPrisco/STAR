@@ -83,6 +83,21 @@
 		<!-- my code -->
 		<script>
 			regular_logger = {interactive:false, warn:add_warning, error:add_error, debug: console.log}
+			diff_logger = {interactive:false, warn:diff_warning, error:diff_error, debug: console.log}
+			warnings_to_clear = []
+			errors_to_clear = []
+			function mark_notifs_for_clearing() {
+				warnings_to_clear = Array.from(document.getElementById("warnings").children)
+				errors_to_clear = Array.from(document.getElementById("errors").children)
+			}
+			function clear_marked_notifs() {
+				for (elem of warnings_to_clear) {
+					elem.remove()
+				}
+				for (elem of errors_to_clear) {
+					elem.remove()
+				}
+			}
 			function clear_notifications() {
 				document.getElementById("errors").replaceChildren();
 				document.getElementById("warnings").replaceChildren();
@@ -101,6 +116,35 @@
 				document.getElementById("errors").append(details)
 				highlight_elem(details)
 			}
+			function is_elem(elem, title, content) {
+				for (child of elem.children) {
+					if (child.nodeName == "P")
+						if (child.textContent != content)
+							return false
+					if (child.nodeName == "SUMMARY")
+						if (child.textContent != title)
+							return false
+				}
+				return true
+			}
+			function diff_error(title, content) {
+				for (let [index,elem] of errors_to_clear.entries()) {
+					if (!is_elem(elem, title, content))
+						continue
+					errors_to_clear.splice(index, 1)
+					return;
+				}
+				add_error(title, content)
+			}
+			function diff_warning(title, content) {
+				for (let [index,elem] of warnings_to_clear.entries()) {
+					if (!is_elem(elem, title, content))
+						continue
+					warnings_to_clear.splice(index, 1)
+					return;
+				}
+				add_warning(title, content)
+			}
 			function add_warning(title, content) {
 				details = document.createElement("details")
 				summary = document.createElement("summary")
@@ -118,14 +162,17 @@
 				elem.classList.add('highlight');
 			}
 			function check_json() {
-				clear_notifications();
 				text = document.getElementById("work-area").value;
-				if (!text)
-					return ;
-				try {
+				if (!text) {
 					clear_notifications();
-					encode_json(text, regular_logger);
+					return ;
+				}
+				try {
+					mark_notifs_for_clearing()
+					encode_json(text, diff_logger);
+					clear_marked_notifs()
 				} catch (error) {
+					clear_marked_notifs()
 					return ;
 				}
 			}
