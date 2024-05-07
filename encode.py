@@ -71,7 +71,7 @@ def encode_9201(json_dict, _logger, _ = None):
 
 
 def try_int_from_enum(value, kind = None):
-	if (isinstance(value, int)) or isinstance(value, float):
+	if isinstance(value, (int, float)):
 		return value
 	if kind == None:
 		return None
