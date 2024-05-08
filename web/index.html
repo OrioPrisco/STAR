@@ -82,13 +82,25 @@
 		</style>
 		<!-- my code -->
 		<script>
+			var work_area;
+			var warnings;
+			var errors;
+			var anchor;
+			window.onload = () => {
+				document.getElementById("upload").addEventListener("change", on_upload);
+				work_area = document.getElementById('work-area');
+				work_area.addEventListener("input", check_json);
+				warnings = document.getElementById("warnings")
+				errors = document.getElementById("errors")
+				anchor = document.getElementById("hack-anchor");
+			}
 			regular_logger = {interactive:false, warn:add_warning, error:add_error, debug: console.log}
 			diff_logger = {interactive:false, warn:diff_warning, error:diff_error, debug: console.log}
 			warnings_to_clear = []
 			errors_to_clear = []
 			function mark_notifs_for_clearing() {
-				warnings_to_clear = Array.from(document.getElementById("warnings").children)
-				errors_to_clear = Array.from(document.getElementById("errors").children)
+				warnings_to_clear = Array.from(warnings.children)
+				errors_to_clear = Array.from(errors.children)
 			}
 			function clear_marked_notifs() {
 				for (elem of warnings_to_clear) {
@@ -99,8 +111,8 @@
 				}
 			}
 			function clear_notifications() {
-				document.getElementById("errors").replaceChildren();
-				document.getElementById("warnings").replaceChildren();
+				errors.replaceChildren();
+				warnings.replaceChildren();
 			}
 			function escape_chars(text) {
 				return text.replace("&", "&amp").replace(">", "&gt").replace("<", "&lt")
@@ -113,7 +125,7 @@
 				p.innerHTML = escape_chars(content)
 				details.replaceChildren(summary, p)
 				details.classList.add("error")
-				document.getElementById("errors").append(details)
+				errors.append(details)
 				highlight_elem(details)
 			}
 			function is_elem(elem, title, content) {
@@ -153,7 +165,7 @@
 				p.innerHTML = escape_chars(content)
 				details.replaceChildren(summary, p)
 				details.classList.add("warning")
-				document.getElementById("warnings").append(details)
+				warnings.append(details)
 				highlight_elem(details)
 			}
 			function highlight_elem(elem) {
@@ -162,7 +174,7 @@
 				elem.classList.add('highlight');
 			}
 			function check_json() {
-				text = document.getElementById("work-area").value;
+				text = work_area.value;
 				if (!text) {
 					clear_notifications();
 					return ;
@@ -179,11 +191,11 @@
 			addEventListener('py:all-done', check_json);
 			function on_upload() {
 				clear_notifications();
-				document.getElementById("work-area").value = "loading...";
+				work_area.value = "loading...";
 				var reader = new FileReader();
 				reader.readAsText(this.files[0], "UTF-8");
 				reader.onload = (evt) => {
-					textarea = document.getElementById("work-area")
+					textarea = work_area
 					text = evt.target.result
 					const filename = this.files[0].name;
 					if (filename.endsWith(".json")) {
@@ -194,13 +206,13 @@
 						try {
 							decoded = decode_gamesave(text, regular_logger)
 						} catch (error) {
-							document.getElementById("errors").scrollIntoView({ behavior: "smooth"});
+							errors.scrollIntoView({ behavior: "smooth"});
 							return;
 						}
 						textarea.value = decoded
 					} else {
 						add_error("Cannot load file " + filename, "Unrecognized file extension");
-						document.getElementById("errors").scrollIntoView({ behavior: "smooth"});
+						errors.scrollIntoView({ behavior: "smooth"});
 						line_counter();
 						textarea.scrollTop = 0;
 						return ;
@@ -210,25 +222,20 @@
 					line_counter();
 				};
 				reader.onerror = (evt) => {
-					textarea = document.getElementById("work-area")
+					textarea = work_area
 					highlight_elem(textarea)
-					document.getElementById("work-area").value = "Error check console for further info";
+					work_area.value = "Error check console for further info";
 				};
 			}
-			window.onload = () => {
-				document.getElementById("upload").addEventListener("change", on_upload);
-				document.getElementById("work-area").addEventListener("input", check_json);
-			}
 			function on_download(extension) {
-				const anchor = document.getElementById("hack-anchor");
-				text = document.getElementById("work-area").value
+				text = work_area.value
 				anchor.download = "gamesave." + extension;
 				if (extension == "d13") {
 					clear_notifications();
 					try {
 						text = encode_json(text, regular_logger)
 					} catch (error) {
-						document.getElementById("errors").scrollIntoView({ behavior: "smooth"});
+						errors.scrollIntoView({ behavior: "smooth"});
 						return;
 					}
 				}
