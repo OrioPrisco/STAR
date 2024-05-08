@@ -169,7 +169,7 @@
 				}
 				try {
 					mark_notifs_for_clearing()
-					encode_json(text, diff_logger);
+					encode_json(text, diff_logger, true);
 					clear_marked_notifs()
 				} catch (error) {
 					clear_marked_notifs()
