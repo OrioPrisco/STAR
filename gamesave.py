@@ -243,7 +243,7 @@ line_handlers = {
 }
 
 
-def decode_file(b64lines, schema, logger):
+def decode_file(b64lines, schema, logger, test_run = False):
 	try:
 		lines = base64.b64decode(b64lines)
 	except binascii.Error as e:
@@ -278,7 +278,8 @@ def decode_file(b64lines, schema, logger):
 			)
 		except Exception as e:
 			log_except(logger, f"Error when decoding field {key}", e)
-			raise e
+			if not test_run:
+				raise e
 	return output
 
 
@@ -296,7 +297,7 @@ def get_entry(key, schema_entry, input_dir):
 	raise Exception(f"Entry not found [{key}/{'/'.join(old_names)}]")
 
 
-def encode_file(jsonlines, schema, logger):
+def encode_file(jsonlines, schema, logger, test_run = False):
 	try:
 		input_dir = json.loads(jsonlines)
 	except json.decoder.JSONDecodeError as e:
@@ -323,7 +324,8 @@ def encode_file(jsonlines, schema, logger):
 			)
 		except Exception as e:
 			log_except(logger, f"Error when encoding field {key}", e)
-			raise e
+			if not test_run:
+				raise e
 	output = "\n".join(output)
 	output = base64.b64encode(output.encode("utf8"))
 	return output.decode("utf8")
@@ -353,16 +355,27 @@ if __name__ == "__main__":
 		default = False,
 		help = "Enables warnings",
 	)
+	parser.add_argument(
+		"-t",
+		"--test-run",
+		required = False,
+		action = "store_true",
+		default = False,
+		help = "Only outputs errors (and enabled warnings/debug logs). Does not stop on the first error",
+	)
 	# option for passing custom schema ?
 	args = parser.parse_args()
 	script_dir = os.path.abspath(os.path.dirname(__file__))
 	schema = json.load(open(os.path.join(script_dir, "gamesave-schema.json"), "r"))
 	logger = Logger(args.verbose, args.warnings)
+	test_run = args.test_run
 	if args.decode:
 		b64lines = "".join(args.input.readlines())
-		output = decode_file(b64lines, schema, logger)
-		print(minify_arrays(json.dumps(output, indent = 4)))
+		output = decode_file(b64lines, schema, logger, test_run)
+		if not test_run:
+			print(minify_arrays(json.dumps(output, indent = 4)))
 	else:
 		jsonlines = "".join(args.input.readlines())
-		output = encode_file(jsonlines, schema, logger)
-		print(output)
+		output = encode_file(jsonlines, schema, logger, test_run)
+		if not test_run:
+			print(output)
