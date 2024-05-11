@@ -283,15 +283,15 @@ def decode_file(b64lines, schema, logger, test_run = False):
 	return output
 
 
-def get_entry(key, schema_entry, input_dir):
-	ret = input_dir.get(key)
+def get_entry(key, schema_entry, input_dict):
+	ret = input_dict.get(key)
 	if ret != None:
 		return ret
 	old_names = schema_entry.get("old names")
 	if not old_names:
 		raise Exception(f"Entry not found '{key}'")
 	for old_name in old_names:
-		ret = input_dir.get(old_name)
+		ret = input_dict.get(old_name)
 		if ret != None:
 			return ret
 	raise Exception(f"Entry not found [{key}/{'/'.join(old_names)}]")
@@ -299,7 +299,7 @@ def get_entry(key, schema_entry, input_dir):
 
 def encode_file(jsonlines, schema, logger, test_run = False):
 	try:
-		input_dir = json.loads(jsonlines)
+		input_dict = json.loads(jsonlines)
 	except json.decoder.JSONDecodeError as e:
 		if logger.interactive:
 			log_except(
@@ -316,7 +316,7 @@ def encode_file(jsonlines, schema, logger, test_run = False):
 		try:
 			output.append(
 				line_handlers[schema[key]["type"]][1](
-					get_entry(key, schema[key], input_dir),
+					get_entry(key, schema[key], input_dict),
 					logger,
 					field = key,
 					**schema[key],
