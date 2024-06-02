@@ -197,7 +197,7 @@ class Unique(Enum):
 	iron_fist = 7
 	shockwave = 8
 	gorynich = 9
-	sueela = 10
+	sveela = 10
 	lidenbrock = 11
 	longinus = 12
 	eternal_vigil = 13
