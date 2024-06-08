@@ -54,7 +54,7 @@ def decode_int_wrapper(value, logger, **kwargs):
 			"If you did not modify your save and got this error, please report it",
 		)
 		return value_as_float
-	return int(value)
+	return int(value_as_float)
 
 
 def decode_bool_wrapper(value, logger, **kwargs):
