@@ -1,3 +1,8 @@
+# This is not up to Date for Into Oblivion !
+
+Into Oblivion drastically changed the savefile format, but in a good way, it's now a base64 encoded json file.
+Just find a base64 decoder and it will do what this program used to do
+
 # Savefile Tool : Arachnid Release
 
 Python scripts to decode Star of Providence, (formerly known as Monolith) save files  
